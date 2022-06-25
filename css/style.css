@@ -88,12 +88,11 @@ a {
   width: 100%;
   height: 35px;
   border: none;
-  margin-bottom: 1.5em;
   background: transparent;
   background-color: rgba(var(--color-orange), 1);
   color: rgba(var(--color-white--700), 1);
   font-weight: 700;
-  font-size: 0.9em;
+  font-size: 0.65rem;
   cursor: pointer;
 }
 
@@ -102,12 +101,63 @@ a {
   height: 33px;
   padding: 0 0.5em;
   border: 1px solid rgba(var(--color-gray), 0.5);
-  font-size: 1em;
+  font-size: 0.7rem;
 }
 
 .input-box:focus {
   outline: none;
-  border-color: rgba(var(--color-black), 1);
+  border-color: var(--color-black), 1 !important;
+}
+
+.product__name--sold-out {
+  position: relative;
+}
+
+.product__name--sold-out::after {
+  content: 'SOLD OUT';
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-size: 0.65em;
+  text-align: center;
+  color: red;
+}
+
+.no-input-warning {
+  position: absolute;
+  bottom: 5px;
+  font-size: 0.65rem;
+  color: red;
+}
+
+form > .no-input-warning {
+  position: absolute;
+  top: -17px;
+  z-index: -1;
+}
+
+.accordion-header {
+  cursor: pointer;
+}
+
+.accordion-header .btn-icon {
+  -webkit-transition: -webkit-transform 200ms linear;
+  transition: -webkit-transform 200ms linear;
+  transition: transform 200ms linear;
+  transition: transform 200ms linear, -webkit-transform 200ms linear;
+}
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  -webkit-transition: max-height 200ms ease-out;
+  transition: max-height 200ms ease-out;
 }
 
 /* ================================================== */
@@ -153,6 +203,7 @@ a {
   width: 75%;
 }
 
+/* ================================================== */
 /* ================================================== */
 .header {
   padding: 0.75em 0;
@@ -530,7 +581,7 @@ a {
   margin-bottom: 0.25em;
 }
 
-.product-page .product-page__product .product__description .description__body p {
+.product-page .product-page__product .product__description .description__body .description__text {
   margin-bottom: 0.25em;
 }
 
@@ -556,7 +607,50 @@ a {
   left: 0;
 }
 
+.product-page .product-page__product .product__notify-option {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 0.5em;
+}
+
+.product-page .product-page__product .product__notify-option .btn-submit {
+  background-color: rgba(var(--color-black), 1);
+}
+
+.product-page .product-page__product .product__notify-option .notify-option__pretext {
+  font-size: 0.9em;
+  margin-bottom: 1.15em;
+}
+
+.product-page .product-page__product .product__notify-option .notify-option__pretext a {
+  color: blue;
+}
+
+.product-page .product-page__product .product__notify-option .notify-option__pretext--submitted {
+  margin-bottom: 0;
+  text-decoration: underline;
+  color: rgba(var(--color-orange), 1);
+}
+
+.product-page .product-page__product .product__notify-option .notify-option__form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 0.5em;
+  position: relative;
+}
+
 .product-page .product-page__product .product__size-option {
+  display: none;
   margin-bottom: 0.5em;
 }
 
@@ -576,12 +670,15 @@ a {
   font-size: 0.75em;
 }
 
-.product-page .product-page__product .product__add-to-bag-option .btn-submit strong {
-  font-size: 0.8em;
+.product-page .product-page__product .product__add-to-bag-option {
+  display: none;
+}
+
+.product-page .product-page__product .product__add-to-bag-option .btn-submit {
+  margin-bottom: 1.5em;
 }
 
 .product-page .product-page__product .notice {
-  margin-bottom: 1em;
   font-size: 0.79em;
   color: rgba(var(--color-gray), 1);
 }
@@ -677,7 +774,7 @@ a {
 .shopping-bag-page,
 .checkout-page {
   --item-image-width: 90px;
-  padding-top: 4em;
+  padding: 4em 0;
   font-size: 0.8rem;
   width: 95%;
   max-width: 1200px;
@@ -878,7 +975,7 @@ a {
 
 .shopping-bag-page .to-checkout .to-checkout__instruction,
 .checkout-page .to-checkout .to-checkout__instruction {
-  margin-bottom: 1em;
+  margin-bottom: 1.65em;
 }
 
 .shopping-bag-page .to-checkout .to-checkout__form,
@@ -891,6 +988,7 @@ a {
       -ms-flex-direction: column;
           flex-direction: column;
   gap: 0.5em;
+  position: relative;
 }
 
 .checkout-page {
@@ -951,10 +1049,26 @@ a {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  position: relative;
 }
 
 .checkout-page .checkout-form-wrapper .checkout-form__form .form__subsection .subsection__inputs .label-input-wrapper .input-box {
-  margin-bottom: 1.25em;
+  margin-bottom: 1.85em;
+  position: relative;
+}
+
+.checkout-page .checkout-form-wrapper .checkout-form__form .form__subsection .subsection__inputs .label-input-wrapper .logos-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 0.5em;
+  position: absolute;
+  right: 10px;
+  bottom: 33%;
+}
+
+.checkout-page .checkout-form-wrapper .checkout-form__form .form__subsection .subsection__inputs .label-input-wrapper .logos-wrapper img {
+  width: 25px;
 }
 
 .checkout-page .checkout-form-wrapper .checkout-form__form .form__subsection .subsection__inputs .label-input-wrapper label {
@@ -991,6 +1105,13 @@ a {
 
 .checkout-page .checkout-form-wrapper .checkout-form__form .form__subsection .subsection__inputs .label-input-wrapper--checkbox input {
   height: 20px;
+}
+
+.checkout-page .checkout-form-wrapper .checkout-form__form .form__subsection .billing-address-inputs-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  -webkit-transition: max-height 200ms linear;
+  transition: max-height 200ms linear;
 }
 
 @media (max-width: 655px) {
@@ -1330,6 +1451,19 @@ a {
     position: -webkit-sticky;
     position: sticky;
     top: calc(50px + 2em);
+  }
+  .checkout-page .order-summary .accordion-header {
+    cursor: auto;
+  }
+  .checkout-page .order-summary .accordion-header .btn-icon {
+    cursor: auto;
+    -webkit-transform: rotate(45deg) !important;
+            transform: rotate(45deg) !important;
+  }
+  .checkout-page .order-summary .accordion-body {
+    max-height: -webkit-fit-content;
+    max-height: -moz-fit-content;
+    max-height: fit-content;
   }
   .checkout-page .checkout-form-wrapper {
     -ms-flex-preferred-size: 60%;

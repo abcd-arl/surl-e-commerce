@@ -90,7 +90,7 @@
 			<div class="product-page__product">
 				<div class="product__left-section-wrapper">
 					<div class="product__left-section">
-						<h1 class="product__name"> Beside [Single] 7" Vinyl </h1>
+						<h1 class="product__name product__name--sold-out"> Beside [Single] 7" Vinyl </h1>
 						<div class="product__price"> P2,435.00</div>
 						<div class="product__description">
 							<div class="description__header"></div>
@@ -155,8 +155,27 @@
 				</div>
 				<div class="product__right-section-wrapper">
 					<div class="product__right-section">
-						<h1 class="product__name product__name--sold-out"> Beside [Single] 7" Vinylaa</h1>
+						<h1 class="product__name product__name--sold-out"> Beside [Single] 7" Vinylaaasasasasasa</h1>
 						<div class="product__price"> P2,435.00</div>
+						<div class="product__notify-option">
+							<p class="notify-option__pretext">Get notified when this product is back in stock.</p>
+							<form action="" class="notify-option__form" name="notify-me" novalidate>
+								<input
+									type="email"
+									placeholder="Email Address"
+									class="input-box"
+									pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+									name="notify-me"
+									required
+								/>
+								<input type="submit" value="NOTIFY ME" name="notify-me" class="btn-submit" />
+							</form>
+							<p class="notice">By clicking 'Notify Me', you agree on our Terms and Services.</p>
+							<!-- <p class="notify-option__pretext notify-option__pretext--submitted">
+								We'll let you know as soon as this becomes available!
+							</p>
+							<p class="notify-option__pretext">For now, you may click <a href="">here</a> to browse other items.</p> -->
+						</div>
 						<div class="product__size-option">
 							<select name="size" id="product-size">
 								<option value="" disabled selected>CHOOSE SIZE</option>
@@ -165,13 +184,24 @@
 							</select>
 						</div>
 						<div class="product__add-to-bag-option">
-							<button class="btn-submit"><strong>ADD TO BAG</strong></button>
+							<button class="btn-submit">ADD TO BAG</button>
+							<div class="notice">
+								<p>Delays and out of stock may occur due to order congestion and supply circumstances.</p>
+								<p>
+									Products that take longer than the standard delivery period or out of stock items will be individually
+									contacted.
+								</p>
+							</div>
 						</div>
 						<div class="product__description">
 							<div class="description__header"></div>
 							<div class="description__body">
-								<p>'Beside' and 'Colors' that SURL (Seol) worked on in the early days of its formation</p>
-								<p>It is telling a deep story that someone has experienced at least once.</p>
+								<p class="description__text">
+									'Beside' and 'Colors' that SURL (Seol) worked on in the early days of its formation
+								</p>
+								<p class="description__text">
+									It is telling a deep story that someone has experienced at least once.
+								</p>
 							</div>
 						</div>
 						<div class="product__description">
@@ -187,54 +217,8 @@
 								</ol>
 							</div>
 						</div>
-						<div class="notice">
-							<p>Delays and out of stock may occur due to order congestion and supply circumstances.</p>
-							<p>
-								Products that take longer than the standard delivery period or out of stock items will be individually
-								contacted.
-							</p>
-						</div>
 					</div>
 				</div>
-
-				<!-- <div class="product__texts-wrapper">
-					<div class="product__texts">
-						<div class="product__name-price-wrapper">
-							<h1 class="product__name"> Beside [Single] 7" Vinyl </h1>
-							<div class="product__price"> P2,435.00</div>
-						</div>
-						<div class="product__size-option">
-							<select name="size" id="product-size">
-								<option value="">CHOOSE SIZE</option>
-								<option value="small">SMALL</option>
-								<option value="medium">MEDIUM</option>
-							</select>
-						</div>
-						<div class="product__add-to-bag-option">
-							<button><strong>ADD TO BAG</strong></button>
-						</div>
-						<div class="product__description">
-							<div class="description__header">
-								<strong>Album Spec</strong>
-							</div>
-							<div class="description__body"> 7", Black, Single Jacket, 45 RMP, 1 Lyric Poster </div>
-						</div>
-						<div class="notice">
-							<p>Delays and out of stock may occur due to order congestion and supply circumstances.</p>
-							<p>
-								Products that take longer than the standard delivery period or out of stock items will be individually
-								contacted.
-							</p>
-						</div>
-					</div>
-				</div> -->
-				<!-- <div class="product__images-wrapper">
-					<div class="product__images">
-						<img src="/album1.1.png" alt="" />
-						<img src="/album1.2.png" alt="" />
-						<img src="/album1.3.png" alt="" />
-					</div>
-				</div> -->
 			</div>
 
 			<!-- <div class="product__other-information">
@@ -342,7 +326,7 @@
 			const images = imagesContainer.children;
 			const imagesIndicators = Array.from(productPage.querySelector('.product__images-indicator').children);
 
-			console.log(imagesIndicators);
+			// console.log(imagesIndicators);
 
 			let currentImageIndex = 0;
 
@@ -375,5 +359,75 @@
 				imagesIndicators[currentImageIndex].classList.add('indicator--active');
 			}
 		})();
+	</script>
+	<script>
+		const form = document.querySelector("form[name='notify-me']");
+
+		requirePatternOnLoadBlur(form);
+		validateFormOnSubmit(form);
+
+		function validateFormOnSubmit(form) {
+			const inputBoxes = Array.from(document.querySelectorAll("input[required='']"));
+
+			form.addEventListener('submit', (e) => {
+				const warningElement = form.querySelector('.no-input-warning');
+
+				for (let i = 0; i < inputBoxes.length; i++) {
+					if (!inputBoxes[i].value) {
+						e.preventDefault();
+						inputBoxes[i].focus();
+						return;
+					}
+				}
+
+				if (warningElement) {
+					e.preventDefault();
+					warningElement.parentElement.querySelector('input').focus();
+					return;
+				}
+			});
+		}
+
+		function requirePatternOnLoadBlur(form) {
+			const inputBoxes = Array.from(form.querySelectorAll('input[pattern]'));
+
+			window.addEventListener('load', (e) => {
+				inputBoxes.forEach((inputBox) => {
+					requirePattern(null, inputBox);
+				});
+			});
+
+			inputBoxes.forEach((inputBox) => {
+				inputBox.addEventListener('blur', requirePattern.bind(null, event, inputBox));
+			});
+
+			function requirePattern(e, inputBox) {
+				const regexPattern = new RegExp(inputBox.pattern);
+
+				if (inputBox.value && !regexPattern.test(inputBox.value)) {
+					console.log(inputBox);
+					const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
+					let warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
+					console.log(label);
+
+					if (label) warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
+
+					const warningElement = document.createElement('p');
+					const warningText = document.createTextNode(warningMessage);
+
+					warningElement.appendChild(warningText);
+					warningElement.classList.add('no-input-warning');
+					inputBox.parentElement.appendChild(warningElement, inputBox);
+					inputBox.style.borderColor = 'red';
+
+					inputBox.addEventListener('input', (e) => {
+						if (inputBox.value) {
+							warningElement.remove();
+							inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+						}
+					});
+				}
+			}
+		}
 	</script>
 </html>

@@ -13,11 +13,11 @@
 		</header>
 		<main class="checkout-page">
 			<section class="order-summary section">
-				<div class="order-summary__title section__title">
+				<div class="order-summary__title section__title accordion-header">
 					<span>ORDER SUMMARY - 3 ITEMS</span>
 					<span class="btn-icon"><img src="icons/plus.svg" alt="" /></span>
 				</div>
-				<div class="order-summary__body">
+				<div class="order-summary__body accordion-body">
 					<ol class="order-summary__items">
 						<li class="order-summary__item">
 							<div class="item__image-wrapper-outer">
@@ -94,57 +94,74 @@
 				<div class="section__title">
 					<span>CHECKOUT</span>
 				</div>
-				<form action="" class="checkout-form__form">
-					<div class="form__subsection">
+				<form action="" class="checkout-form__form" name="checkout" novalidate>
+					<div id="shipping-address" class="form__subsection">
 						<div class="subsection__title"> SHIPPING ADDRESS </div>
 						<div class="subsection__inputs">
 							<div class="label-input-wrapper">
 								<label for="first-name">First Name</label>
-								<input type="text" id="first-name" name="checkout" class="input-box" />
+								<input type="text" id="first-name" name="checkout" class="input-box" required />
 							</div>
 							<div class="label-input-wrapper">
 								<label for="last-name">Last Name</label>
-								<input type="text" id="last-name" name="checkout" class="input-box" />
+								<input type="text" id="last-name" name="checkout" class="input-box" required />
 							</div>
 						</div>
 						<div class="subsection__inputs">
 							<div class="label-input-wrapper">
 								<label for="phone-number">Phone Number</label>
-								<input type="text" id="phone-number" name="checkout" class="input-box" />
+								<input
+									type="text"
+									id="phone-number"
+									name="checkout"
+									maxlength="17"
+									pattern="[+639][ ]\d{3}[ ]\d{4}[ ]\d{3}"
+									placeholder="e.g., +639 012 3456 789"
+									class="input-box"
+									required
+								/>
 							</div>
 							<div class="label-input-wrapper">
 								<label for="email-address">Email Address</label>
-								<input type="email" id="email-address" name="checkout" class="input-box" />
+								<input
+									type="email"
+									id="email-address"
+									name="checkout"
+									pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+									placeholder="e.g., email@example.com"
+									class="input-box"
+									required
+								/>
 							</div>
 						</div>
 						<div class="subsection__inputs">
 							<div class="label-input-wrapper">
-								<label for="street-address">Street Address</label>
-								<input type="text" id="street-address" name="checkout" class="input-box" />
+								<label for="shipping-street-address">Street Address</label>
+								<input type="text" id="shipping-street-address" name="checkout" class="input-box" required />
 							</div>
 							<div class="label-input-wrapper">
-								<label for="additional-address">Additional Address</label>
-								<input type="text" id="additional-address" name="checkout" class="input-box" />
-							</div>
-						</div>
-						<div class="subsection__inputs">
-							<div class="label-input-wrapper">
-								<label for="city-municipality">City or Municipality</label>
-								<input type="text" id="city-municipality" name="checkout" class="input-box" />
-							</div>
-							<div class="label-input-wrapper">
-								<label for="zip-code">Zip or Postal Code</label>
-								<input type="text" id="zip-code" name="checkout" class="input-box" />
+								<label for="shipping-additional-address">Additional Address (Optional)</label>
+								<input type="text" id="shipping-additional-address" name="checkout" class="input-box" />
 							</div>
 						</div>
 						<div class="subsection__inputs">
 							<div class="label-input-wrapper">
-								<label for="province">Province</label>
-								<input type="text" id="province" name="checkout" class="input-box" />
+								<label for="shipping-city-municipality">City or Municipality</label>
+								<input type="text" id="shipping-city-municipality" name="checkout" class="input-box" required />
 							</div>
 							<div class="label-input-wrapper">
-								<label for="country">Country</label>
-								<input type="text" id="country" name="checkout" class="input-box" />
+								<label for="shipping-zip-code">Zip or Postal Code</label>
+								<input type="text" id="shipping-zip-code" name="checkout" class="input-box" required />
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="shipping-province">Province</label>
+								<input type="text" id="shipping-province" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="shipping-country">Country</label>
+								<input type="text" id="shipping-country" name="checkout" class="input-box" required />
 							</div>
 						</div>
 					</div>
@@ -153,65 +170,268 @@
 						<div class="subsection__inputs">
 							<div class="label-input-wrapper">
 								<label for="card-number">Card Number</label>
-								<input type="text" id="card-number" name="checkout" class="input-box" />
+								<input
+									type="text"
+									id="card-number"
+									name="checkout"
+									class="input-box"
+									placeholder="1234 1234 1234 1234"
+									pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}"
+									required
+								/>
+								<div class="logos-wrapper">
+									<img src="icons/visa.svg" alt="" />
+									<img src="icons/mastercard.svg" alt="" />
+								</div>
 							</div>
 							<div class="label-input-wrapper">
 								<label for="expiration-date">Expiration Date</label>
-								<input type="date" id="expiration-date" name="checkout" class="input-box" />
+								<input
+									type="text"
+									id="expiration-date"
+									name="checkout"
+									placeholder="MM / YY"
+									class="input-box"
+									required
+								/>
 							</div>
 						</div>
 						<div class="subsection__inputs">
 							<div class="label-input-wrapper">
 								<label for="card-holder-name">Card Holder's name</label>
-								<input type="text" id="card-holder-name" name="checkout" class="input-box" />
+								<input type="text" id="card-holder-name" name="checkout" class="input-box" required />
 							</div>
 							<div class="label-input-wrapper">
 								<label for="security-code">Security Code</label>
-								<input type="text" id="security-code" name="checkout" class="input-box" />
+								<input
+									type="text"
+									id="security-code"
+									name="checkout"
+									class="input-box"
+									pattern="[0-9]{3}"
+									placeholder="CVV"
+									required
+								/>
+							</div>
+						</div>
+					</div>
+					<div id="billing-address" class="form__subsection">
+						<div class="subsection__title"> BILLING ADDRESS </div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper--checkbox">
+								<label for="same-as-shipping-ad">Same as shipping address</label>
+								<input type="checkbox" id="same-as-shipping-ad" name="checkout" required checked />
+							</div>
+						</div>
+						<div class="billing-address-inputs-wrapper">
+							<div class="subsection__inputs">
+								<div class="label-input-wrapper">
+									<label for="billing-street-address">Street Address</label>
+									<input type="text" id="billing-street-address" name="checkout" class="input-box" required />
+								</div>
+								<div class="label-input-wrapper">
+									<label for="billing-additional-address">Additional Address (Optional)</label>
+									<input type="text" id="billing-additional-address" name="checkout" class="input-box" />
+								</div>
+							</div>
+							<div class="subsection__inputs">
+								<div class="label-input-wrapper">
+									<label for="billing-city-municipality">City or Municipality</label>
+									<input type="text" id="billing-city-municipality" name="checkout" class="input-box" required />
+								</div>
+								<div class="label-input-wrapper">
+									<label for="billing-zip-code">Zip or Postal Code</label>
+									<input type="text" id="billing-zip-code" name="checkout" class="input-box" required />
+								</div>
+							</div>
+							<div class="subsection__inputs">
+								<div class="label-input-wrapper">
+									<label for="billing-province">Province</label>
+									<input type="text" id="billing-province" name="checkout" class="input-box" required />
+								</div>
+								<div class="label-input-wrapper">
+									<label for="billing-country">Country</label>
+									<input type="text" id="billing-country" name="checkout" class="input-box" required />
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="form__subsection">
-						<div class="subsection__title"> BILLING ADDRESS </div>
 						<div class="subsection__inputs">
-							<div class="label-input-wrapper--checkbox">
-								<label for="card-number">Same as shipping address</label>
-								<input type="checkbox" id="card-number" name="checkout" />
-							</div>
-						</div>
-						<div class="subsection__inputs">
-							<div class="label-input-wrapper">
-								<label for="street-address">Street Address</label>
-								<input type="text" id="street-address" name="checkout" class="input-box" />
-							</div>
-							<div class="label-input-wrapper">
-								<label for="additional-address">Additional Address</label>
-								<input type="text" id="additional-address" name="checkout" class="input-box" />
-							</div>
-						</div>
-						<div class="subsection__inputs">
-							<div class="label-input-wrapper">
-								<label for="city-municipality">City or Municipality</label>
-								<input type="text" id="city-municipality" name="checkout" class="input-box" />
-							</div>
-							<div class="label-input-wrapper">
-								<label for="zip-code">Zip or Postal Code</label>
-								<input type="text" id="zip-code" name="checkout" class="input-box" />
-							</div>
-						</div>
-						<div class="subsection__inputs">
-							<div class="label-input-wrapper">
-								<label for="province">Province</label>
-								<input type="text" id="province" name="checkout" class="input-box" />
-							</div>
-							<div class="label-input-wrapper">
-								<label for="country">Country</label>
-								<input type="text" id="country" name="checkout" class="input-box" />
-							</div>
+							<input type="submit" id="card-number" value="PLACE ORDER" name="checkout" class="btn-submit" required />
 						</div>
 					</div>
 				</form>
 			</section>
 		</main>
 	</body>
+	<script>
+		(function () {
+			const form = document.querySelector('form[name="checkout"]');
+
+			addCharOnInput(document.querySelector('#phone-number'), ' ');
+
+			requirePatternOnLoadBlur(form);
+			requireInputOnBlur(form);
+			validateFormOnSubmit(form);
+
+			setAddresses();
+
+			function setAddresses() {
+				const checkbox = document.querySelector('#same-as-shipping-ad');
+				const shippingAddresses = Array.from(document.querySelectorAll('#shipping-address input[id^="shipping-"'));
+				const billingAddresses = Array.from(document.querySelectorAll('#billing-address input[id^="billing-"'));
+				const billingAddressesWrapper = document.querySelector('.billing-address-inputs-wrapper');
+
+				window.addEventListener('load', copyAddress);
+				checkbox.addEventListener('change', copyAddress);
+
+				// remove event listener
+
+				function copyAddress(e) {
+					if (checkbox.checked) {
+						// billingAddressesWrapper.style.maxHeight = null;
+
+						for (let i = 0; i < shippingAddresses.length; i++) {
+							shippingAddresses[i].addEventListener('input', (e) => {
+								billingAddresses[i].value = shippingAddresses[i].value;
+							});
+							console.log(billingAddresses[i].value);
+						}
+					} else {
+						billingAddresses.forEach((billingAddress) => {
+							// shippingAddresses.forEach((shippingAddress) => {
+							// 	shippingAddress.removeEventListener('input');
+							// });
+							billingAddress.value = '';
+							billingAddressesWrapper.style.maxHeight = 'fit-content';
+						});
+					}
+				}
+			}
+
+			function validateFormOnSubmit(form) {
+				const inputBoxes = Array.from(document.querySelectorAll("input[required='']"));
+
+				form.addEventListener('submit', (e) => {
+					const warningElement = form.querySelector('.no-input-warning');
+
+					for (let i = 0; i < inputBoxes.length; i++) {
+						if (!inputBoxes[i].value) {
+							e.preventDefault();
+							inputBoxes[i].focus();
+							inputBoxes[i].blur();
+						}
+					}
+
+					if (warningElement) {
+						e.preventDefault();
+						warningElement.parentElement.querySelector('input').focus();
+						// warningElement.parentElement.querySelector('input').blur();
+					}
+				});
+			}
+
+			function requirePatternOnLoadBlur(form) {
+				const inputBoxes = Array.from(form.querySelectorAll('input[pattern]'));
+
+				window.addEventListener('load', (e) => {
+					inputBoxes.forEach((inputBox) => {
+						requirePattern(null, inputBox);
+					});
+				});
+
+				inputBoxes.forEach((inputBox) => {
+					inputBox.addEventListener('blur', requirePattern.bind(null, event, inputBox));
+				});
+
+				function requirePattern(e, inputBox) {
+					const regexPattern = new RegExp(inputBox.pattern);
+
+					if (inputBox.value && !regexPattern.test(inputBox.value)) {
+						const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
+						let warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
+						console.log(label.innerText);
+
+						if (label) warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
+
+						const warningElement = document.createElement('p');
+						const warningText = document.createTextNode(warningMessage);
+
+						warningElement.appendChild(warningText);
+						warningElement.classList.add('no-input-warning');
+						inputBox.parentElement.appendChild(warningElement, inputBox);
+						inputBox.style.borderColor = 'red';
+
+						inputBox.addEventListener('input', (e) => {
+							if (inputBox.value) {
+								warningElement.remove();
+								inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+							}
+						});
+					}
+				}
+			}
+
+			function requireInputOnBlur(form) {
+				const inputBoxes = Array.from(form.querySelectorAll(`input[required]`));
+				const inputSubmit = form.querySelector(`input[type='submit'][name='${form.name}']`);
+
+				inputBoxes.forEach((inputBox) => {
+					inputBox.addEventListener('blur', (e) => {
+						if (!inputBox.value) {
+							const inputBoxParent = inputBox.parentElement;
+
+							if (!inputBoxParent.contains(inputBoxParent.querySelector('.no-input-warning'))) {
+								const label = inputBoxParent.querySelector('label');
+								const warningElement = document.createElement('p');
+								const warningText = document.createTextNode(`Please enter ${label.innerText.toLowerCase()}.`);
+
+								warningElement.appendChild(warningText);
+								warningElement.classList.add('no-input-warning');
+								inputBoxParent.appendChild(warningElement, inputBox);
+								inputBox.style.borderColor = 'red';
+
+								inputBox.addEventListener('input', (e) => {
+									if (inputBox.value) {
+										warningElement.remove();
+										inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+									}
+								});
+							}
+						}
+					});
+				});
+			}
+
+			function addCharOnInput(inputElement, char, spacePosBefore = [4, 8, 13]) {
+				inputElement.addEventListener('keydown', (e) => {
+					console.log(/^[a-z0-9]$/i.test(e.key));
+					if ((e.key == ' ') & (e.key !== 'Backspace')) {
+						e.preventDefault();
+					}
+
+					if (spacePosBefore.includes(inputElement.value.length) && e.key !== 'Backspace') {
+						inputElement.value = inputElement.value + char;
+					}
+				});
+			}
+		})();
+	</script>
+	<script>
+		(function () {
+			const accordionHeader = document.querySelector('.accordion-header');
+			const accordionBody = document.querySelector('.accordion-body');
+
+			accordionHeader.addEventListener('click', (e) => {
+				if (accordionBody.style.maxHeight) {
+					accordionHeader.querySelector('.btn-icon').style.transform = 'rotate(90deg)';
+					accordionBody.style.maxHeight = null;
+				} else {
+					accordionHeader.querySelector('.btn-icon').style.transform = 'rotate(45deg)';
+					accordionBody.style.maxHeight = accordionBody.scrollHeight + 'px';
+				}
+			});
+		})();
+	</script>
 </html>
