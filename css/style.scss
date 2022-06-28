@@ -101,11 +101,20 @@ a {
 	cursor: pointer;
 }
 
+select.input-box {
+	appearance: none;
+	background-image: url('/icons/caret-up.svg');
+	background-repeat: no-repeat;
+	background-size: 0.75em;
+	background-position: right 0.85em center;
+}
+
 .input-box {
 	width: 100%;
 	height: 33px;
 	padding: 0 0.5em;
 	border: 1px solid rgba(var(--color-gray), 0.5);
+	background-color: transparent;
 
 	font-size: 0.7rem;
 
@@ -615,7 +624,7 @@ form {
 		}
 
 		.product__size-option {
-			display: none;
+			// display: none;
 			margin-bottom: 0.5em;
 
 			select {
@@ -631,12 +640,12 @@ form {
 				background-position: 97.5%;
 				appearance: none;
 
-				font-size: 0.75em;
+				font-size: 0.8em;
 			}
 		}
 
 		.product__add-to-bag-option {
-			display: none;
+			// display: none;
 
 			.btn-submit {
 				margin-bottom: 1.5em;
@@ -867,7 +876,7 @@ form {
 			justify-content: space-between;
 			align-items: center;
 
-			padding-bottom: 0.25em;
+			padding-bottom: 0.5em;
 			border-bottom: 1px solid rgba(var(--color-gray), 1);
 
 			.btn-icon {
@@ -942,7 +951,8 @@ form {
 						}
 
 						#phone-number,
-						#zip-code {
+						#shipping-zip-code,
+						#billing-zip-code {
 							width: 50%;
 						}
 
@@ -969,7 +979,6 @@ form {
 				.billing-address-inputs-wrapper {
 					max-height: 0;
 					overflow: hidden;
-					// transition: max-height 200ms linear;
 				}
 			}
 		}
@@ -1299,7 +1308,7 @@ form {
 		.order-summary {
 			flex-basis: 40%;
 			margin: 0;
-			margin-top: 3em;
+			margin-top: calc(2em + 16px);
 
 			height: calc(100vh - 50px - 2em);
 			position: sticky;
@@ -1307,9 +1316,9 @@ form {
 
 			.accordion-header {
 				cursor: auto;
+
 				.btn-icon {
-					cursor: auto;
-					transform: rotate(45deg) !important;
+					display: none;
 				}
 			}
 

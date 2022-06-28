@@ -116,7 +116,7 @@
 									name="checkout"
 									maxlength="17"
 									pattern="[+639][ ]\d{3}[ ]\d{4}[ ]\d{3}"
-									placeholder="e.g., +639 012 3456 789"
+									placeholder="+639 012 3456 789"
 									class="input-box"
 									required
 								/>
@@ -128,7 +128,7 @@
 									id="email-address"
 									name="checkout"
 									pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-									placeholder="e.g., email@example.com"
+									placeholder="email@example.com"
 									class="input-box"
 									required
 								/>
@@ -160,8 +160,8 @@
 								<input type="text" id="shipping-province" name="checkout" class="input-box" required />
 							</div>
 							<div class="label-input-wrapper">
-								<label for="shipping-country">Country</label>
-								<input type="text" id="shipping-country" name="checkout" class="input-box" required />
+								<label for="country">Country</label>
+								<input type="text" id="country" name="checkout" class="input-box" value="Philippines" disabled />
 							</div>
 						</div>
 					</div>
@@ -177,6 +177,7 @@
 									class="input-box"
 									placeholder="1234 1234 1234 1234"
 									pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}"
+									maxlength="19"
 									required
 								/>
 								<div class="logos-wrapper">
@@ -191,6 +192,7 @@
 									id="expiration-date"
 									name="checkout"
 									placeholder="MM / YY"
+									maxlength="7"
 									class="input-box"
 									required
 								/>
@@ -250,8 +252,8 @@
 									<input type="text" id="billing-province" name="checkout" class="input-box" required />
 								</div>
 								<div class="label-input-wrapper">
-									<label for="billing-country">Country</label>
-									<input type="text" id="billing-country" name="checkout" class="input-box" required />
+									<label for="country">Country</label>
+									<input type="text" id="country" name="checkout" class="input-box" value="Philippines" disabled />
 								</div>
 							</div>
 						</div>
@@ -269,7 +271,12 @@
 		(function () {
 			const form = document.querySelector('form[name="checkout"]');
 
-			addCharOnInput(document.querySelector('#phone-number'), ' ');
+			addCharOnKeyUp(document.querySelector('#phone-number'), ' ');
+			addCharOnKeyUp(document.querySelector('#card-number'), ' ', [4, 9, 14]);
+			addCharOnKeyUp(document.querySelector('#expiration-date'), ' / ', [2]);
+
+			setExpirationDatePattern();
+			setPhoneNumberInitial();
 
 			requirePatternOnLoadBlur(form);
 			requireInputOnBlur(form);
@@ -277,37 +284,140 @@
 
 			setAddresses();
 
+			function setPhoneNumberInitial() {
+				const phoneNum = document.querySelector('#phone-number');
+
+				phoneNum.addEventListener('click', (e) => {
+					if (!e.target.value) e.target.value = '+639 ';
+				});
+			}
+
+			function setExpirationDatePattern() {
+				const expDate = document.querySelector('#expiration-date');
+				const dt = new Date();
+				const currentMonth = parseInt(dt.getMonth() + 1)
+					.toString()
+					.padStart(2, '0');
+				const currentYear = parseInt(dt.getFullYear().toString().substr(-2));
+
+				expDate.pattern = `(0[1-9]|1[0-2]) \/ ([0-9]{2})`;
+
+				expDate.addEventListener('input', (e) => {
+					if (e.target.value.length == 1 && parseInt(e.target.value) > 1) {
+						e.target.value = 0 + e.target.value + ' / ';
+					}
+				});
+
+				window.addEventListener('load', (e) => {
+					if (expDate.value) {
+						const event = new Event('blur');
+						expDate.dispatchEvent(event);
+					}
+				});
+
+				expDate.addEventListener('blur', (e) => {
+					const enteredMonths = parseInt(e.target.value.slice(0, 2));
+					const enteredYear = parseInt(e.target.value.slice(5));
+
+					if (
+						(e.target.value.length == 7 && (enteredYear > currentYear + 4 || enteredYear < currentYear)) ||
+						(enteredMonths <= parseInt(currentMonth) && enteredYear == 22)
+					) {
+						addWarning(e.target);
+					} else {
+						const warningElements = expDate.parentElement.querySelectorAll('.no-input-warning');
+
+						if (warningElements) {
+							warningElements.forEach((warningElement) => {
+								warningElement.remove();
+							});
+							expDate.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+						}
+					}
+				});
+			}
+
+			function removeWarningsInBilling() {
+				const warningElements = form.querySelectorAll('#billing-address .no-input-warning');
+
+				if (warningElements) {
+					Array.from(warningElements).forEach((warningElement) => {
+						warningElement.parentElement.querySelector('input').style.borderColor = 'rgba(var(--color-gray), 0.5)';
+						warningElement.remove();
+					});
+				}
+			}
+
+			function addWarning(inputBox) {
+				const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
+				let warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
+
+				if (label) warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
+
+				const warningElement = document.createElement('p');
+				const warningText = document.createTextNode(warningMessage);
+
+				warningElement.appendChild(warningText);
+				warningElement.classList.add('no-input-warning');
+				inputBox.parentElement.appendChild(warningElement, inputBox);
+				inputBox.style.borderColor = 'red';
+
+				return warningElement;
+			}
+
 			function setAddresses() {
 				const checkbox = document.querySelector('#same-as-shipping-ad');
-				const shippingAddresses = Array.from(document.querySelectorAll('#shipping-address input[id^="shipping-"'));
-				const billingAddresses = Array.from(document.querySelectorAll('#billing-address input[id^="billing-"'));
+				const shippingAddresses = document.querySelectorAll('#shipping-address input[id^="shipping-"');
+				const billingAddresses = document.querySelectorAll('#billing-address input[id^="billing-"');
 				const billingAddressesWrapper = document.querySelector('.billing-address-inputs-wrapper');
 
-				window.addEventListener('load', copyAddress);
-				checkbox.addEventListener('change', copyAddress);
-
-				// remove event listener
-
-				function copyAddress(e) {
+				window.addEventListener('load', (e) => {
 					if (checkbox.checked) {
-						// billingAddressesWrapper.style.maxHeight = null;
-
 						for (let i = 0; i < shippingAddresses.length; i++) {
-							shippingAddresses[i].addEventListener('input', (e) => {
-								billingAddresses[i].value = shippingAddresses[i].value;
-							});
-							console.log(billingAddresses[i].value);
+							billingAddresses[i].value = shippingAddresses[i].value;
 						}
+
+						const event = new Event('change');
+						checkbox.dispatchEvent(event);
+
+						billingAddressesWrapper.style.maxHeight = null;
 					} else {
-						billingAddresses.forEach((billingAddress) => {
-							// shippingAddresses.forEach((shippingAddress) => {
-							// 	shippingAddress.removeEventListener('input');
-							// });
-							billingAddress.value = '';
-							billingAddressesWrapper.style.maxHeight = 'fit-content';
-						});
+						billingAddressesWrapper.style.maxHeight = 'fit-content';
 					}
+				});
+
+				function copyShippingAddress(e) {
+					const billingInput = billingAddressesWrapper.querySelector(`#${e.target.id.replace('shipping', 'billing')}`);
+
+					billingInput.value = e.target.value;
 				}
+
+				checkbox.addEventListener('change', (e) => {
+					if (checkbox.checked) {
+						billingAddressesWrapper.style.maxHeight = null;
+
+						removeWarningsInBilling();
+
+						Array.from(shippingAddresses).forEach((shippingAddress) => {
+							const billingInput = billingAddressesWrapper.querySelector(
+								`#${shippingAddress.id.replace('shipping', 'billing')}`
+							);
+							billingInput.value = shippingAddress.value;
+
+							shippingAddress.addEventListener('input', copyShippingAddress);
+						});
+					} else {
+						Array.from(shippingAddresses).forEach((shippingAddress) => {
+							Array.from(billingAddresses).forEach((billingAddress) => {
+								billingAddress.value = '';
+							});
+
+							shippingAddress.removeEventListener('input', copyShippingAddress);
+						});
+
+						billingAddressesWrapper.style.maxHeight = 'fit-content';
+					}
+				});
 			}
 
 			function validateFormOnSubmit(form) {
@@ -315,19 +425,30 @@
 
 				form.addEventListener('submit', (e) => {
 					const warningElement = form.querySelector('.no-input-warning');
+					const checkbox = document.querySelector('#same-as-shipping-ad');
 
-					for (let i = 0; i < inputBoxes.length; i++) {
-						if (!inputBoxes[i].value) {
-							e.preventDefault();
-							inputBoxes[i].focus();
-							inputBoxes[i].blur();
+					let flag = true;
+
+					inputBoxes.forEach((inputBox) => {
+						if (!inputBox.value) {
+							flag = false;
+							inputBox.focus();
+							inputBox.blur();
 						}
+					});
+
+					if (checkbox.checked) {
+						removeWarningsInBilling();
 					}
 
 					if (warningElement) {
-						e.preventDefault();
+						flag = false;
 						warningElement.parentElement.querySelector('input').focus();
 						// warningElement.parentElement.querySelector('input').blur();
+					}
+
+					if (!flag) {
+						e.preventDefault();
 					}
 				});
 			}
@@ -349,19 +470,7 @@
 					const regexPattern = new RegExp(inputBox.pattern);
 
 					if (inputBox.value && !regexPattern.test(inputBox.value)) {
-						const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
-						let warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
-						console.log(label.innerText);
-
-						if (label) warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
-
-						const warningElement = document.createElement('p');
-						const warningText = document.createTextNode(warningMessage);
-
-						warningElement.appendChild(warningText);
-						warningElement.classList.add('no-input-warning');
-						inputBox.parentElement.appendChild(warningElement, inputBox);
-						inputBox.style.borderColor = 'red';
+						const warningElement = addWarning(inputBox);
 
 						inputBox.addEventListener('input', (e) => {
 							if (inputBox.value) {
@@ -404,9 +513,8 @@
 				});
 			}
 
-			function addCharOnInput(inputElement, char, spacePosBefore = [4, 8, 13]) {
-				inputElement.addEventListener('keydown', (e) => {
-					console.log(/^[a-z0-9]$/i.test(e.key));
+			function addCharOnKeyUp(inputElement, char, spacePosBefore = [4, 8, 13]) {
+				inputElement.addEventListener('keyup', (e) => {
 					if ((e.key == ' ') & (e.key !== 'Backspace')) {
 						e.preventDefault();
 					}
@@ -425,7 +533,7 @@
 
 			accordionHeader.addEventListener('click', (e) => {
 				if (accordionBody.style.maxHeight) {
-					accordionHeader.querySelector('.btn-icon').style.transform = 'rotate(90deg)';
+					accordionHeader.querySelector('.btn-icon').style.transform = 'rotate(0deg)';
 					accordionBody.style.maxHeight = null;
 				} else {
 					accordionHeader.querySelector('.btn-icon').style.transform = 'rotate(45deg)';
