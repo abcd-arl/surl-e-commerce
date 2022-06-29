@@ -667,16 +667,9 @@ form > .no-input-warning {
 .product-page .product-page__product .product__size-option select {
   width: 100%;
   height: 3em;
-  padding: 0 2%;
+  padding-right: 1em;
   border: none;
   border-bottom: 0.5px solid rgba(var(--color-black), 1);
-  background: transparent;
-  background-image: url("/icons/caret-up.svg");
-  background-repeat: no-repeat;
-  background-position: 97.5%;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
   font-size: 0.8em;
 }
 
@@ -750,6 +743,7 @@ form > .no-input-warning {
 
 .product-page .product-page__product .product__images-wrapper .product__images-indicator {
   margin-top: 1em;
+  margin-bottom: 2.5em;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -780,7 +774,7 @@ form > .no-input-warning {
 .shopping-bag-page,
 .checkout-page {
   --item-image-width: 90px;
-  padding: 4em 0;
+  padding-top: 4em;
   font-size: 0.8rem;
   width: 95%;
   max-width: 1200px;
@@ -942,7 +936,74 @@ form > .no-input-warning {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
+}
+
+.shopping-bag-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .item__do-not-include,
+.shopping-bag-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .remove__pre-display,
+.shopping-bag-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .remove__answer,
+.shopping-bag-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .item__do-not-include,
+.shopping-bag-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .remove__pre-display,
+.shopping-bag-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .remove__answer,
+.checkout-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .item__do-not-include,
+.checkout-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .remove__pre-display,
+.checkout-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .remove__answer,
+.checkout-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .item__do-not-include,
+.checkout-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .remove__pre-display,
+.checkout-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .remove__answer {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.shopping-bag-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__pre-display,
+.shopping-bag-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__pre-display,
+.checkout-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__pre-display,
+.checkout-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__pre-display {
+  display: none;
+}
+
+.shopping-bag-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__question,
+.shopping-bag-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__answer,
+.shopping-bag-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__question,
+.shopping-bag-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__answer,
+.checkout-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__question,
+.checkout-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__answer,
+.checkout-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__question,
+.checkout-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .item__remove--answered .remove__answer {
+  display: unset;
+}
+
+.shopping-bag-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .remove__question,
+.shopping-bag-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .remove__question,
+.checkout-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .remove__question,
+.checkout-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .remove__question {
+  margin-right: 0.25em;
+  text-decoration: none;
+  display: none;
+}
+
+.shopping-bag-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .remove__answer,
+.shopping-bag-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .remove__answer,
+.checkout-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .remove__answer,
+.checkout-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .remove__answer {
+  display: none;
+}
+
+.shopping-bag-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .remove__answer--yes,
+.shopping-bag-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .remove__answer--yes,
+.checkout-page .order-summary__item .item__texts-price-options-wrapper .item__other-options .remove__answer--yes,
+.checkout-page .shopping-bag__item .item__texts-price-options-wrapper .item__other-options .remove__answer--yes {
+  margin-right: 0.25em;
+}
+
+.shopping-bag-page .shopping-bag__item--not-inlcuded > *:not(.item__texts-price-options-wrapper),
+.checkout-page .shopping-bag__item--not-inlcuded > *:not(.item__texts-price-options-wrapper) {
+  opacity: 0.5;
+}
+
+.shopping-bag-page .shopping-bag__item--not-inlcuded .item__texts-price-wrapper,
+.checkout-page .shopping-bag__item--not-inlcuded .item__texts-price-wrapper {
+  opacity: 0.5;
 }
 
 .shopping-bag-page .order-summary__footer,

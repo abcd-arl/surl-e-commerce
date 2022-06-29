@@ -177,7 +177,7 @@
 							<p class="notify-option__pretext">For now, you may click <a href="">here</a> to browse other items.</p> -->
 						<!-- </div> -->
 						<div class="product__size-option">
-							<select name="size" id="product-size">
+							<select name="size" id="product-size" class="input-box">
 								<option value="" disabled selected>CHOOSE SIZE</option>
 								<option value="small">SMALL - Only 3 remaining</option>
 								<option value="medium">MEDIUM - Only 2 remaining</option>
@@ -185,13 +185,6 @@
 						</div>
 						<div class="product__add-to-bag-option">
 							<button class="btn-submit">ADD TO BAG</button>
-							<div class="notice">
-								<p>Delays and out of stock may occur due to order congestion and supply circumstances.</p>
-								<p>
-									Products that take longer than the standard delivery period or out of stock items will be individually
-									contacted.
-								</p>
-							</div>
 						</div>
 						<div class="product__description">
 							<div class="description__header"></div>
@@ -216,6 +209,13 @@
 									<li><span>Colors</span></li>
 								</ol>
 							</div>
+						</div>
+						<div class="notice">
+							<p>Delays and out of stock may occur due to order congestion and supply circumstances.</p>
+							<p>
+								Products that take longer than the standard delivery period or out of stock items will be individually
+								contacted.
+							</p>
 						</div>
 					</div>
 				</div>
@@ -405,20 +405,7 @@
 				const regexPattern = new RegExp(inputBox.pattern);
 
 				if (inputBox.value && !regexPattern.test(inputBox.value)) {
-					console.log(inputBox);
-					const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
-					let warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
-					console.log(label);
-
-					if (label) warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
-
-					const warningElement = document.createElement('p');
-					const warningText = document.createTextNode(warningMessage);
-
-					warningElement.appendChild(warningText);
-					warningElement.classList.add('no-input-warning');
-					inputBox.parentElement.appendChild(warningElement, inputBox);
-					inputBox.style.borderColor = 'red';
+					const warningElement = addWarning(inputBox);
 
 					inputBox.addEventListener('input', (e) => {
 						if (inputBox.value) {
@@ -427,6 +414,46 @@
 						}
 					});
 				}
+			}
+		}
+
+		const inputBoxes = Array.from(form.querySelectorAll('input[pattern]'));
+
+		window.addEventListener('load', (e) => {
+			inputBoxes.forEach((inputBox) => {
+				requirePattern(null, inputBox);
+			});
+		});
+
+		inputBoxes.forEach((inputBox) => {
+			inputBox.addEventListener('blur', requirePattern.bind(null, event, inputBox));
+		});
+
+		function requirePattern(e, inputBox) {
+			const regexPattern = new RegExp(inputBox.pattern);
+
+			if (inputBox.value && !regexPattern.test(inputBox.value)) {
+				console.log(inputBox);
+				const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
+				let warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
+				console.log(label);
+
+				if (label) warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
+
+				const warningElement = document.createElement('p');
+				const warningText = document.createTextNode(warningMessage);
+
+				warningElement.appendChild(warningText);
+				warningElement.classList.add('no-input-warning');
+				inputBox.parentElement.appendChild(warningElement, inputBox);
+				inputBox.style.borderColor = 'red';
+
+				inputBox.addEventListener('input', (e) => {
+					if (inputBox.value) {
+						warningElement.remove();
+						inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+					}
+				});
 			}
 		}
 	</script>

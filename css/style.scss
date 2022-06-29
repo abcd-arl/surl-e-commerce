@@ -630,15 +630,9 @@ form {
 			select {
 				width: 100%;
 				height: 3em;
-				padding: 0 2%;
+				padding-right: 1em;
 				border: none;
 				border-bottom: 0.5px solid rgba(var(--color-black), 1);
-
-				background: transparent;
-				background-image: url('/icons/caret-up.svg');
-				background-repeat: no-repeat;
-				background-position: 97.5%;
-				appearance: none;
 
 				font-size: 0.8em;
 			}
@@ -709,6 +703,7 @@ form {
 
 			.product__images-indicator {
 				margin-top: 1em;
+				margin-bottom: 2.5em;
 				display: flex;
 				gap: 0.2em;
 				justify-content: center;
@@ -737,7 +732,7 @@ form {
 .checkout-page {
 	--item-image-width: 90px;
 
-	padding: 4em 0;
+	padding-top: 4em;
 	font-size: 0.8rem;
 	@include container-95-1200();
 
@@ -828,8 +823,50 @@ form {
 				display: flex;
 				justify-content: space-between;
 
-				margin-bottom: 0.5em;
+				margin-bottom: 0.25em;
+
+				.item__do-not-include,
+				.remove__pre-display,
+				.remove__answer {
+					text-decoration: underline;
+					cursor: pointer;
+				}
+
+				.item__remove--answered {
+					.remove__pre-display {
+						display: none;
+					}
+
+					.remove__question,
+					.remove__answer {
+						display: unset;
+					}
+				}
+
+				.remove__question {
+					margin-right: 0.25em;
+					text-decoration: none;
+					display: none;
+				}
+
+				.remove__answer {
+					display: none;
+				}
+
+				.remove__answer--yes {
+					margin-right: 0.25em;
+				}
 			}
+		}
+	}
+
+	.shopping-bag__item--not-inlcuded {
+		& > *:not(.item__texts-price-options-wrapper) {
+			opacity: 0.5;
+		}
+
+		.item__texts-price-wrapper {
+			opacity: 0.5;
 		}
 	}
 
