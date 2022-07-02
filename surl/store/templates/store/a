@@ -1,0 +1,300 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Store | SURL</title>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+
+<body>
+	<header class="header header--product-page">
+		<ul class="header__items">
+			<li class="header__item display-none primary-navigation-button">
+
+				<button class="btn-icon"><img src="{% static 'icons/menu.svg' %}" alt="menu icon" /></button>
+			</li>
+			<li class="header__item">
+				<a href="index.html" class="logo-surl"><img src="{% static 'icons/logo-surl.svg' %}"
+						alt="surl logo" /></a>
+			</li>
+			<li class="header__item primary-navigation-wrapper">
+				<nav class="primary-navigation">
+					<button id="primary-nav-close-btn" class="btn-icon btn-icon--close">
+						<img src="{% static 'icons/close.svg' %}" alt="" />
+					</button>
+					<ul class="primary-navigation__items">
+						<li class="primary-navigation__item"><a href="">Music</a></li>
+						<li class="primary-navigation__item"><a href="">Shows</a></li>
+						<li class="primary-navigation__item"><a href="">Store</a></li>
+						<li class="primary-navigation__item"><a href="">About us</a></li>
+						<li class="primary-navigation__item primary-navigation__search">
+							<form action="" id="header-search-form" class="search__form visibility-hidden">
+								<input type="text" placeholder="SEARCH" class="search__text" />
+								<input type="submit" value="GO" class="search__submit" disabled />
+							</form>
+							<button id="search-activate-button" class="search__button btn-icon">
+								<img src="{% static 'icons/search.svg' %}" alt="search icon" />
+							</button>
+						</li>
+					</ul>
+				</nav>
+			</li>
+			<li class="header__item bag-navigation-wrapper">
+				<button class="bag-navigation-button btn-icon">
+					<img src="{% static 'icons/shopping-bag.svg' %}" alt="shopping-bag" />
+				</button>
+				<nav class="bag-navigation display-none">
+					<ul class="bag-navigation__items">
+						<li class="bag-navigation__item bag-navigation__added-items-wrapper">
+							<ul class="bag-navigation__added-items">
+								<li class="bag-navigation__added-item">
+									<a href="" class="added-item__link">
+										<img src="album1.1.png" alt="" class="added-item__img" />
+										<span class="added-item__name">Beside [Single] 7" Vinylasasasasasasasasaa</span>
+									</a>
+									<span class="added-item__quantity">x2</span>
+								</li>
+								<li class="bag-navigation__added-item">
+									<a href="" class="added-item__link">
+										<img src="album1.1.png" alt="" class="added-item__img" />
+										<span class="added-item__name">Beside [Single] 7" Vinylasasasasasasasasaa</span>
+									</a>
+									<span class="added-item__quantity">x2</span>
+								</li>
+							</ul>
+						</li>
+						<li class="bag-navigation__item">
+							<a href="" class="item__link">
+								<img src="icons/shopping-bag.svg" alt="" class="item__icon" />
+								<span class="item__name">Bag</span>
+							</a>
+						</li>
+						<li class="bag-navigation__item">
+							<a href="" class="item__link">
+								<img src="icons/find-order.svg" alt="" class="item__icon" />
+								<span class="item__name">Find an order</span>
+							</a>
+						</li>
+						<li class="bag-navigation__item">
+							<a href="" class="item__link">
+								<img src="icons/report.svg" alt="" class="item__icon" />
+								<span class="item__name">Report a problem</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</li>
+		</ul>
+	</header>
+
+	<main class="store">
+		<div class="store__header">
+			<div class="store__categories">
+				<span aria-selected="true" class="store__category">Albums</span>
+				<span aria-selected="false" class="store__category">Merchandise</span>
+			</div>
+			<div class="store__sort-items">
+				<label for="sort-type" class="sort-items__type">Sort by</label>
+				<select name="sort-type" id="sort-items" class="sort-items__type">
+					<option value="date">Date</option>
+					<option value="price">Price</option>
+					<option value="name">Name</option>
+				</select>
+				<span aria-selected="true" class="sort-items__order">
+					<img src="icons/down.svg" alt="" />
+				</span>
+				<span aria-selected="false" class="sort-items__order">
+					<img src="icons/up.svg" alt="" />
+				</span>
+			</div>
+		</div>
+
+		<section class="store__products">
+			<article class="store__product">
+				<a href="" class="product__link">
+					<h2 class="product__name">Beside [Single] 7" Vinylasasasasasasasasaasasasasasasasasasasasasasassa
+					</h2>
+					<div class="product__price">P2,345.00</div>
+					<div class="product__img">
+						<img src="album1.1.png" alt="" />
+					</div>
+				</a>
+			</article>
+			<article class="store__product">
+				<a href="" class="product__link">
+					<h2 class="product__name">Beside [Single] 7" Vinylasasasasasasasasaasasasasasasasasasasasasasassa
+					</h2>
+					<div class="product__price">P2,345.00</div>
+					<div class="product__img">
+						<img src="album1.1.png" alt="" />
+					</div>
+				</a>
+			</article>
+			<article class="store__product">
+				<a href="" class="product__link">
+					<h2 class="product__name">Beside [Single] 7" Vinylasasasasasasasasaasasasasasasasasasasasasasassa
+					</h2>
+					<div class="product__price">P2,345.00</div>
+					<div class="product__img">
+						<img src="album1.1.png" alt="" />
+					</div>
+				</a>
+			</article>
+			<article class="store__product">
+				<a href="" class="product__link">
+					<h2 class="product__name">
+						<div class="skeleton skeleton--text skeleton--text--md"></div>
+					</h2>
+					<div class="product__price">
+						<div class="skeleton skeleton--text skeleton--text--sm"></div>
+					</div>
+					<div class="product__img">
+						<div class="skeleton skeleton--img"></div>
+					</div>
+				</a>
+			</article>
+			<article class="store__product">
+				<h2 class="product__name">
+					<div class="skeleton skeleton--text skeleton--text--md"></div>
+				</h2>
+				<div class="product__price">
+					<div class="skeleton skeleton--text skeleton--text--sm"></div>
+				</div>
+				<div class="product__img">
+					<div class="skeleton skeleton--img"></div>
+				</div>
+			</article>
+		</section>
+	</main>
+</body>
+<script>
+	(function () {
+		const header = document.querySelector('.header');
+
+		const searchActivateButton = header.querySelector('#search-activate-button');
+		const searchForm = header.querySelector('#header-search-form');
+		const searchFormText = searchForm.querySelector('.search__text');
+		const searchFormSubmit = searchForm.querySelector('.search__submit');
+
+		searchActivateButton.addEventListener('click', (e) => {
+			searchForm.classList.toggle('visibility-hidden');
+		});
+
+		searchFormText.addEventListener('input', (e) => {
+			if (searchFormText.value) {
+				searchFormSubmit.removeAttribute('disabled');
+				searchFormSubmit.style.cursor = 'pointer';
+				searchFormSubmit.style.color = 'rgba(var(--color-orange), 1)';
+				searchFormSubmit.style.opacity = 1;
+			} else {
+				searchFormSubmit.setAttribute('disabled', '');
+				searchFormSubmit.style.cursor = 'not-allowed';
+				searchFormSubmit.style.color = '';
+				searchFormSubmit.style.opacity = 0.7;
+			}
+		});
+
+		const primaryNavButton = header.querySelector('.primary-navigation-button');
+		const primaryNavCloseButton = header.querySelector('#primary-nav-close-btn');
+		const primaryNavWrapper = header.querySelector('.primary-navigation-wrapper');
+
+		const bagNavButton = header.querySelector('.bag-navigation-button');
+		const bagNav = header.querySelector('.bag-navigation');
+
+		activateNavigation(primaryNavButton, primaryNavWrapper, 'translate-x-0', primaryNavCloseButton);
+		activateNavigation(bagNavButton, bagNav, 'display-none');
+
+		function activateNavigation(button, container, className, closeButton = undefined) {
+			const offClick = function (e) {
+				if (!container.contains(e.target) || (closeButton != undefined && closeButton.contains(e
+						.target))) {
+					container.classList.toggle(className);
+					e.stopPropagation();
+					document.removeEventListener('click', offClick, true);
+				}
+			};
+
+			button.addEventListener('click', (e) => {
+				container.classList.toggle(className);
+				e.stopPropagation();
+				document.addEventListener('click', offClick, true);
+			});
+		}
+	})();
+</script>
+
+</html>
+
+
+from dataclasses import field, fields
+from os import defpath
+from pyexpat import model
+from unicodedata import category
+from rest_framework import serializers
+from store import models
+
+
+# class ProductSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = models.Product
+#         fields = ['name', 'price', 'description']
+
+
+# class ImageSerializer(serializers.ModelSerializer):
+#     product = ProductSerializer()
+
+#     class Meta:
+#         model = models.Image
+#         fields = ['product', 'image']
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = models.Image
+        fields = ['image']
+
+
+class InventorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Inventory
+        fields = ['size', 'stocks']
+
+
+class ProductAllSerializer(serializers.ModelSerializer):
+
+    images = serializers.SerializerMethodField()
+    total_stocks = serializers.SerializerMethodField()
+
+    def get_images(self, obj):
+        # images = []
+        # all_images = models.Image.objects.filter(product=obj.id)
+        # for image in all_images:
+        #     images.append(image.image.path)
+        # return images
+
+        img = models.Image.objects.filter(product=obj.id)
+        return ImageSerializer(img, many=True)
+
+
+    def get_total_stocks(self, obj):
+        total_stocks = 0
+        product = models.Inventory.objects.filter(product=obj.id)
+        for p in product:
+            total_stocks = total_stocks + p.stocks
+
+        return total_stocks
+
+
+    class Meta:
+        model = models.Product
+        fields = ['id', 'name', 'price', 'description','total_stocks', 'images', 'date_created', ]
+
+

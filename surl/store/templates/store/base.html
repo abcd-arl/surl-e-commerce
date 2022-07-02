@@ -1,0 +1,145 @@
+{% load livereload_tags %} {% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{% block title %} {% endblock %}</title>
+		<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+		{% livereload_script %}
+	</head>
+
+	<body>
+		<header class="header header--product-page">
+			<ul class="header__items">
+				<li class="header__item display-none primary-navigation-button">
+					<button class="btn-icon"><img src="{% static 'icons/menu.svg' %}" alt="menu icon" /></button>
+				</li>
+				<li class="header__item">
+					<a href="index.html" class="logo-surl"><img src="{% static 'icons/logo-surl.svg' %}" alt="surl logo" /></a>
+				</li>
+				<li class="header__item primary-navigation-wrapper">
+					<nav class="primary-navigation">
+						<button id="primary-nav-close-btn" class="btn-icon btn-icon--close">
+							<img src="{% static 'icons/close.svg' %}" alt="" />
+						</button>
+						<ul class="primary-navigation__items">
+							<li class="primary-navigation__item"><a href="">Music</a></li>
+							<li class="primary-navigation__item"><a href="">Shows</a></li>
+							<li class="primary-navigation__item"><a href="">Store</a></li>
+							<li class="primary-navigation__item"><a href="">About us</a></li>
+							<li class="primary-navigation__item primary-navigation__search">
+								<form action="" id="header-search-form" class="search__form visibility-hidden">
+									<input type="text" placeholder="SEARCH" class="search__text" />
+									<input type="submit" value="GO" class="search__submit" disabled />
+								</form>
+								<button id="search-activate-button" class="search__button btn-icon">
+									<img src="{% static 'icons/search.svg' %}" alt="search icon" />
+								</button>
+							</li>
+						</ul>
+					</nav>
+				</li>
+				<li class="header__item bag-navigation-wrapper">
+					<button class="bag-navigation-button btn-icon">
+						<img src="{% static 'icons/shopping-bag.svg' %}" alt="shopping-bag" />
+					</button>
+					<div class="bag-navigation-notif">25</div>
+					<nav class="bag-navigation display-none">
+						<ul class="bag-navigation__items">
+							<li class="bag-navigation__item bag-navigation__added-items-wrapper">
+								<ul class="bag-navigation__added-items">
+									<li class="bag-navigation__added-item">
+										<div class="skeleton skeleton--text"></div>
+									</li>
+									<li class="bag-navigation__added-item">
+										<div class="skeleton skeleton--text"></div>
+									</li>
+								</ul>
+							</li>
+							<li class="bag-navigation__item">
+								<a href="" class="item__link">
+									<img src="{% static 'icons/shopping-bag.svg' %}" alt="" class="item__icon" />
+									<span id="header-bag-name" class="item__name">Bag</span>
+								</a>
+							</li>
+							<li class="bag-navigation__item">
+								<a href="" class="item__link">
+									<img src="{% static 'icons/find-order.svg' %}" alt="" class="item__icon" />
+									<span class="item__name">Find an order</span>
+								</a>
+							</li>
+							<li class="bag-navigation__item">
+								<a href="" class="item__link">
+									<img src="{% static 'icons/report.svg' %}" alt="" class="item__icon" />
+									<span class="item__name">Report a problem</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</li>
+			</ul>
+		</header>
+
+		{% block main %} {% endblock %}
+	</body>
+</html>
+
+<script>
+	(function () {
+		const header = document.querySelector('.header');
+
+		const searchActivateButton = header.querySelector('#search-activate-button');
+		const searchForm = header.querySelector('#header-search-form');
+		const searchFormText = searchForm.querySelector('.search__text');
+		const searchFormSubmit = searchForm.querySelector('.search__submit');
+
+		searchActivateButton.addEventListener('click', (e) => {
+			searchForm.classList.toggle('visibility-hidden');
+		});
+
+		searchFormText.addEventListener('input', (e) => {
+			if (searchFormText.value) {
+				searchFormSubmit.removeAttribute('disabled');
+				searchFormSubmit.style.cursor = 'pointer';
+				searchFormSubmit.style.color = 'rgba(var(--color-orange), 1)';
+				searchFormSubmit.style.opacity = 1;
+			} else {
+				searchFormSubmit.setAttribute('disabled', '');
+				searchFormSubmit.style.cursor = 'not-allowed';
+				searchFormSubmit.style.color = '';
+				searchFormSubmit.style.opacity = 0.7;
+			}
+		});
+
+		const primaryNavButton = header.querySelector('.primary-navigation-button');
+		const primaryNavCloseButton = header.querySelector('#primary-nav-close-btn');
+		const primaryNavWrapper = header.querySelector('.primary-navigation-wrapper');
+
+		const bagNavButton = header.querySelector('.bag-navigation-button');
+		const bagNav = header.querySelector('.bag-navigation');
+
+		activateNavigation(primaryNavButton, primaryNavWrapper, 'translate-x-0', primaryNavCloseButton);
+		activateNavigation(bagNavButton, bagNav, 'display-none');
+
+		function activateNavigation(button, container, className, closeButton = undefined) {
+			const offClick = function (e) {
+				if (!container.contains(e.target) || (closeButton != undefined && closeButton.contains(e.target))) {
+					container.classList.toggle(className);
+					e.stopPropagation();
+					document.removeEventListener('click', offClick, true);
+				}
+			};
+
+			button.addEventListener('click', (e) => {
+				container.classList.toggle(className);
+				e.stopPropagation();
+				document.addEventListener('click', offClick, true);
+			});
+		}
+	})();
+</script>
+
+{% block script_one %} {% endblock %} {% block script_two %} {% endblock %}

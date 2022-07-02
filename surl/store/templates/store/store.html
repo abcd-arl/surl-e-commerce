@@ -1,0 +1,197 @@
+{% extends 'store/base.html' %} {% load static %} {% block title %} Store | Title {% endblock %} {% block main %}
+<main class="store">
+	<div class="store__header">
+		<div class="store__categories">
+			<span aria-selected="true" class="store__category">Albums</span>
+			<span aria-selected="false" class="store__category">Merchandise</span>
+		</div>
+		<div class="store__sort-items">
+			<label for="sort-type" class="sort-items__type">Sort by</label>
+			<select name="sort-type" id="sort-items" class="sort-items__type">
+				<option value="date">Date</option>
+				<option value="price">Price</option>
+				<option value="name">Name</option>
+			</select>
+			<span aria-selected="true" class="sort-items__order" data-value="descending">
+				<img src="{% static 'icons/down.svg' %}" alt="" />
+			</span>
+			<span aria-selected="false" class="sort-items__order" data-value="ascending">
+				<img src="{% static 'icons/up.svg' %}" alt="" />
+			</span>
+		</div>
+	</div>
+	<template id="template-store-product">
+		<article id="store-product" class="store__product">
+			<a href="" id="product-link" class="product__link">
+				<h2 id="product-name" class="product__name">
+					<div class="skeleton skeleton--text skeleton--text--md"></div>
+				</h2>
+				<div id="product-price" class="product__price">
+					<div class="skeleton skeleton--text skeleton--text--sm"></div>
+				</div>
+				<div id="product-img-wrapper" class="product__img">
+					<img id="product-img" class="skeleton skeleton--img" src="" alt="" />
+				</div>
+			</a>
+		</article>
+	</template>
+	<section class="store__products"> </section>
+</main>
+{% endblock %} {% block script_one %}
+<script>
+	console.log('hello');
+	(function () {
+		let currentCategory = 'Album';
+		setStoreCategories();
+		setSkeletonLoading();
+
+		function setSkeletonLoading() {
+			const storeProductsContainer = document.querySelector('.store__products');
+			const storeProductTemplate = document.querySelector('#template-store-product');
+
+			storeProductsContainer.innerHTML = '';
+
+			for (let i = 0; i < 3; i++) {
+				storeProductsContainer.append(storeProductTemplate.content.cloneNode(true));
+			}
+		}
+
+		function setStoreCategories() {
+			const storeCategories = Array.from(document.querySelector('.store__categories').children);
+
+			window.addEventListener('load', (e) => {
+				const event = new Event('click');
+				storeCategories[0].dispatchEvent(event);
+			});
+
+			storeCategories[0].addEventListener('click', (e) => {
+				if (e.target.getAttribute('aria-selected')) {
+					e.target.setAttribute('aria-selected', true);
+					storeCategories[1].setAttribute('aria-selected', false);
+					currentCategory = 'Album';
+					getStoreProducts(currentCategory);
+				}
+			});
+
+			storeCategories[1].addEventListener('click', (e) => {
+				if (e.target.getAttribute('aria-selected')) {
+					e.target.setAttribute('aria-selected', true);
+					storeCategories[0].setAttribute('aria-selected', false);
+					currentCategory = 'Merchandise	';
+					getStoreProducts(currentCategory);
+				}
+			});
+
+			const sortBy = document.querySelector('#sort-items');
+			const sortIns = Array.from(document.querySelectorAll('.sort-items__order'));
+
+			sortBy.addEventListener('click', (e) => {
+				getStoreProducts(currentCategory);
+			});
+
+			sortIns[0].addEventListener('click', (e) => {
+				if (sortIns[0].getAttribute('aria-selected')) {
+					sortIns[0].setAttribute('aria-selected', true);
+					sortIns[1].setAttribute('aria-selected', false);
+					getStoreProducts(currentCategory);
+				}
+			});
+
+			sortIns[1].addEventListener('click', (e) => {
+				if (sortIns[1].getAttribute('aria-selected')) {
+					sortIns[1].setAttribute('aria-selected', true);
+					sortIns[0].setAttribute('aria-selected', false);
+					getStoreProducts(currentCategory);
+				}
+			});
+		}
+
+		function getStoreProducts(currentCategory) {
+			setSkeletonLoading();
+
+			if (sessionStorage.getItem(`surl-store-${currentCategory}`) === null) {
+				const url = `http://127.0.0.1:8000/api/store/${currentCategory}/`;
+				fetch(url)
+					.then((response) => {
+						return response.json();
+					})
+					.then((response) => {
+						setStoreContents(response);
+						sessionStorage.setItem(`surl-store-${currentCategory}`, JSON.stringify(response));
+					})
+					.catch((err) => {
+						console.log('error message: ', err);
+					});
+			} else {
+				setStoreContents(JSON.parse(sessionStorage.getItem(`surl-store-${currentCategory}`)));
+			}
+		}
+
+		function sortContents(response, sortBy, sortIn) {
+			const sortedResponse = JSON.parse(JSON.stringify(response));
+
+			// using if instead of switch, not formatting properly huhu
+			if (sortBy == 'date') {
+				if (sortIn == 'descending') {
+					sortedResponse.sort((a, b) => {
+						return new Date(b.date_created) - new Date(a.date_created);
+					});
+				} else {
+					sortedResponse.sort((a, b) => {
+						return new Date(a.date_created) - new Date(b.date_created);
+					});
+				}
+			} else if (sortBy == 'price') {
+				if (sortIn == 'descending') {
+					sortedResponse.sort((a, b) => {
+						return parseInt(b.price) - parseInt(a.price);
+					});
+				} else {
+					sortedResponse.sort((a, b) => {
+						return parseInt(a.price) - parseInt(b.price);
+					});
+				}
+			} else if (sortBy == 'name') {
+				if (sortIn == 'descending') {
+					sortedResponse.sort((a, b) => {
+						return a.name.localeCompare(b.name);
+					});
+				} else {
+					sortedResponse.sort((a, b) => {
+						return b.name.localeCompare(a.name);
+					});
+				}
+			}
+
+			return sortedResponse;
+		}
+
+		function setStoreContents(response) {
+			const sortByValue = document.querySelector('#sort-items').value;
+			const sortInValue = document.querySelector('.sort-items__order[aria-selected="true"]').dataset.value;
+
+			const products = sortContents(response, sortByValue, sortInValue);
+
+			const storeProductsContainer = document.querySelector('.store__products');
+			const storeProductTemplate = document.querySelector('#template-store-product');
+
+			storeProductsContainer.innerHTML = '';
+			storeProductsContainer.style.pointerEvents = 'unset';
+
+			for (let i = 0; i < products.length; i++) {
+				const product = storeProductTemplate.content.cloneNode(true);
+				product.getElementById('product-link').src = '';
+				product.getElementById('product-name').textContent = products[i].name;
+				product.getElementById('product-price').textContent = '₱' + products[i].price;
+				product.getElementById('product-img').src = products[i].images[0].image;
+
+				if (!products[i].total_stocks) {
+					product.getElementById('store-product').classList.add('store__product--sold-out');
+				}
+
+				storeProductsContainer.append(product);
+			}
+		}
+	})();
+</script>
+{% endblock %}

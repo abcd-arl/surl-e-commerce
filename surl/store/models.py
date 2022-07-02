@@ -17,19 +17,22 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     category = models.ForeignKey(Category, to_field='name', on_delete=models.CASCADE)
-    description = models.CharField(max_length=700, null=True)
-    date_created = models.DateField(default=timezone.now)
+    description = models.TextField(null=True)
+    date_created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
 
 
 class Image(models.Model):
+    def directory_path(instance, filename):
+        return 'store/images/{0}/{1}/{2}'.format(instance.product.category, instance.product.name, filename)
+
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='store/images/{}'.format(product.name))
+    image = models.ImageField(upload_to=directory_path)
 
     def __str__(self):
-        return "self.image"
+        return str(self.image)
 
 
 class Size(models.Model):

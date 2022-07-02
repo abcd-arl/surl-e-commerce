@@ -338,4 +338,23 @@
 			}
 		})();
 	</script>
+	<script>
+		function sortContents(response, sortBy, sortIn) {
+					let sortedResponse = null
+					switch (sortBy) {
+						case 'date':
+							if (sortIn == 'descending') {
+								sortedResponse = response.sort((a, b) => {
+									return new Date(b.date_created) - new Date(a.date_created)
+								})
+							} else {
+								sortedResponse = response.sort((a, b) => {
+										return new Date(a.date_created) - new Date(b.date_created)
+									})
+							}
+
+
+
+					}
+	</script>
 </html>

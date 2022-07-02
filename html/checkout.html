@@ -433,11 +433,14 @@
 						if (!inputBox.value) {
 							flag = false;
 							inputBox.focus();
-							inputBox.blur();
+
+							if (checkbox == null) {
+								inputBox.blur();
+							}
 						}
 					});
 
-					if (checkbox.checked) {
+					if (checkbox != null && checkbox.checked) {
 						removeWarningsInBilling();
 					}
 

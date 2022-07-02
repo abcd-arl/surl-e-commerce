@@ -1,0 +1,565 @@
+{% extends 'store/base.html' %} {% load static %} {% block title %} Product | SURL {% endblock %} {% block main %}
+<main class="product-page">
+	<div class="product-page__product">
+		<div class="product__left-section-wrapper">
+			<div class="product__left-section">
+				<h1 class="product__name">
+					<div class="skeleton skeleton--text skeleton--text--md"></div>
+				</h1>
+				<div class="product__price">
+					<div class="skeleton skeleton--text skeleton--text--sm"></div>
+				</div>
+				<div class="product__description-wrapper">
+					<div class="product__description">
+						<div class="description__header"></div>
+						<div class="description__body">
+							<div class="skeleton skeleton--text"></div>
+							<div class="skeleton skeleton--text"></div>
+							<div class="skeleton skeleton--text skeleton--text--md"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="product__images-wrapper">
+			<div class="product__images-navigator">
+				<button class="btn-icon navigator navigator--left">
+					<img src="{% static 'icons/caret-left.svg' %}" alt="" />
+				</button>
+				<button class="btn-icon navigator navigator--right">
+					<img src="{% static 'icons/caret-right.svg' %}" alt="" />
+				</button>
+			</div>
+			<div class="product__images">
+				<div class="loader-wrapper">
+					<div class="loader"></div>
+				</div>
+			</div>
+			<div class="product__images-indicator"></div>
+		</div>
+		<div class="product__right-section-wrapper">
+			<div class="product__right-section">
+				<h1 class="product__name">
+					<div class="skeleton skeleton--text skeleton--text--md"></div>
+				</h1>
+				<div class="product__price">
+					<div class="skeleton skeleton--text skeleton--text--sm"></div>
+				</div>
+				<div class="product__notify-option-wrapper">
+					<div class="product__notify-option">
+						<p class="notify-option__pretext">Get notified when this product is back in stock.</p>
+						<form action="" class="notify-option__form" name="notify-me" novalidate>
+							<input
+								type="email"
+								placeholder="Email Address"
+								class="input-box"
+								pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+								name="notify-me"
+								required
+							/>
+							<input type="submit" value="NOTIFY ME" name="notify-me" class="btn-submit" />
+						</form>
+						<p class="notice">By clicking 'Notify Me', you agree on our Terms and Services.</p>
+						<!-- <p class="notify-option__pretext notify-option__pretext--submitted">
+							We'll let you know as soon as this becomes available!
+						</p>
+						<p class="notify-option__pretext">For now, you may click <a href="">here</a> to browse other items.</p> -->
+					</div>
+				</div>
+				<div class="product__purchase-option-wrapper">
+					<div class="product__size-option">
+						<select name="size" id="product-size" class="input-box">
+							<option value="" disabled selected>CHOOSE A SIZE</option>
+						</select>
+					</div>
+					<div class="product__add-to-bag-option">
+						<button class="btn-submit"></button>
+					</div>
+				</div>
+				<div class="product__description-wrapper">
+					<div class="product__description">
+						<div class="description__header"></div>
+						<div class="description__body">
+							<div class="skeleton skeleton--text"></div>
+							<div class="skeleton skeleton--text"></div>
+							<div class="skeleton skeleton--text skeleton--text--md"></div>
+						</div>
+					</div>
+				</div>
+				<div class="notice notice--add-to-bag">
+					<div class="skeleton skeleton--text"></div>
+					<div class="skeleton skeleton--text"></div>
+					<div class="skeleton skeleton--text skeleton--text--md"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- <div class="product__other-information">
+			<div class="other-information__shipping" style="margin-bottom: 100em">
+				<p><span>Delivery Company:</span> CJ Korea Express (1588-1255)</p>
+				<p><span>Delivery Area:</span> All regions of Korea</p>
+				<p>
+					<span>Shipping Cost:</span> One way 2,800 won (If the first delivery is free, 5,800 won is charged) / Free
+					with purchases of 30,000 won or more / Jeju additional 3,000 won, island areas other than Jeju additional
+					3,000 won
+				</p>
+				<p><span>Delivery Period:</span> Ships within 3 days from the date of payment</p>
+			</div>
+			<div class="other-information__exchange-return">
+				<p>
+					<span>Shopping Cost:</span>
+					Simple change of mind: round-trip delivery fee 5,800 won
+				</p>
+				<p>
+					<span>Return Address:</span>
+					Happy Robot Record, 3rd floor, 78 Seogang-ro, Mapo-gu, Seoul (MPMG) (Right: 04099)
+				</p>
+				<div>
+					<span>Request period according to the reason for return/exchange</span>
+					<ul>
+						<li>
+							<p>
+								Buyer's simple change of mind within 7 days of receipt of the product (Buyer bears the return shipping
+								cost)
+							</p>
+						</li>
+						<li>
+							<p>
+								In the case of product defects, returns/exchanges are not allowed within 3 months of receipt of the
+								product or within 30 days of knowing that the product is different from the indication/advertisement
+								(seller bears the return shipping cost)
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="other-information__seller"></div>
+		</div> -->
+</main>
+{% endblock %} {% block script_one %}
+<script>
+	(function () {
+		// resetShoppingBag();
+		getProductInfo();
+		addItemToHeaderShoppingBag();
+
+		function getProductInfo() {
+			const url = `http://127.0.0.1:8000/api/product/{{id}}/`;
+
+			fetch(url)
+				.then((response) => {
+					return response.json();
+				})
+				.then((response) => {
+					const form = document.querySelector("form[name='notify-me']");
+
+					setProductInfo(response);
+					requirePatternOnLoadBlur(form);
+					validateFormOnSubmit(form);
+					validateOnAddToBag(response);
+				})
+				.catch((err) => {
+					console.log('error message: ', err);
+				});
+		}
+
+		// add to bag
+		function validateOnAddToBag(response) {
+			const productSizeSelector = document.querySelector('#product-size');
+			const addToBagButton = document.querySelector('.product__add-to-bag-option .btn-submit');
+			let warningElement = null;
+
+			addToBagButton.addEventListener('click', (e) => {
+				if (warningElement) {
+					warningElement.remove();
+				}
+
+				if (!hasChosenSize()) {
+					warningElement = addWarning(addToBagButton, 'Please choose a size');
+					productSizeSelector.addEventListener('change', (e) => {
+						warningElement.remove();
+					});
+				} else {
+					const result = addItemToLocalStorage(response);
+					if (result == 'max-limit') {
+						warningElement = addWarning(addToBagButton, 'Sorry, maximum of three (3) for every item per order');
+					} else if (result == 'max-stocks') {
+						warningElement = addWarning(addToBagButton, 'No more stocks left');
+					} else {
+						addItemToHeaderShoppingBag();
+					}
+				}
+			});
+
+			function hasChosenSize() {
+				const productSizeSelector = document.querySelector('#product-size');
+				const selectedOption = productSizeSelector.options[productSizeSelector.selectedIndex];
+
+				if (selectedOption.hasAttribute('disabled')) {
+					return false;
+				}
+
+				return true;
+			}
+		}
+		function addItemToLocalStorage(response) {
+			const contents = JSON.parse(JSON.stringify(response));
+
+			if (!localStorage.getItem('surlShoppingBag')) {
+				localStorage.setItem('surlShoppingBag', JSON.stringify({}));
+			}
+
+			if (!localStorage.getItem('surlCurrentCartID')) {
+				localStorage.setItem('surlCurrentCartID', 1);
+			}
+
+			const localBag = JSON.parse(localStorage.surlShoppingBag);
+			const productSizeSelector = document.querySelector('#product-size');
+			const selectedOption = productSizeSelector.options[productSizeSelector.selectedIndex].value;
+
+			let countSimilarItems = {};
+			for (const [key, value] of Object.entries(localBag)) {
+				if (localBag[key].product_id in countSimilarItems) {
+					countSimilarItems[localBag[key].product_id] = countSimilarItems[localBag[key].product_id] + 1;
+				} else {
+					countSimilarItems[localBag[key].product_id] = 1;
+				}
+			}
+
+			if (contents.id in countSimilarItems && countSimilarItems[contents.id] == 3) {
+				return 'max-limit';
+			} else if (countSimilarItems[contents.id] == contents.stocks[selectedOption]) {
+				return 'max-stocks';
+			}
+
+			const currentCartID = localStorage.surlCurrentCartID;
+			localStorage.surlCurrentCartID = parseInt(currentCartID) + 1;
+
+			localBag[currentCartID] = {
+				product_id: contents.id,
+				product_name: contents.name,
+				selectedSize: selectedOption,
+				isIncluded: true,
+				thumbnail: contents.images[0].image,
+			};
+
+			localStorage.surlShoppingBag = JSON.stringify(localBag);
+
+			return true;
+		}
+		function addItemToHeaderShoppingBag() {
+			const url = 'http://127.0.0.1:8000/api/inventory/';
+
+			fetch(url)
+				.then((response) => {
+					return response.json();
+				})
+				.then((response) => {
+					setIncludedItems(response);
+				});
+
+			const headerBagNotification = document.querySelector('.bag-navigation-notif');
+			const bagName = document.querySelector('#header-bag-name');
+
+			const headerBagContainer = document.querySelector('.bag-navigation__added-items-wrapper');
+			const headerBag = document.querySelector('.bag-navigation__added-items');
+			headerBag.innerHTML = '';
+			headerBagContainer.style.display = 'none';
+
+			// this should be formatted in the backend?
+			function setIncludedItems(response) {
+				let totalIncludedItems = 0;
+				const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+				let contentsFormatted = {};
+				for (let i = 0; i < response.length; i++) {
+					contentsFormatted[String([response[i].product_id, response[i].size])] = response[i].stocks;
+				}
+
+				if (Object.keys(localBag).length) {
+					for (const [key, value] of Object.entries(localBag)) {
+						if (!contentsFormatted[String([value.product_id, value.selectedSize])]) {
+							value.isIncluded = false;
+						}
+
+						if (localBag[key].isIncluded) {
+							totalIncludedItems = totalIncludedItems + 1;
+						}
+					}
+
+					addToHeaderShoppingBag();
+				}
+
+				if (totalIncludedItems) {
+					headerBagNotification.style.display = 'flex';
+					headerBagNotification.innerText = totalIncludedItems;
+					bagName.innerText = `Bag (${totalIncludedItems})`;
+				}
+			}
+
+			function addToHeaderShoppingBag() {
+				const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+				const headerBagContainer = document.querySelector('.bag-navigation__added-items-wrapper');
+				const headerBag = document.querySelector('.bag-navigation__added-items');
+				headerBagContainer.style.display = 'block';
+
+				counter = 0;
+				for (let key in localBag) {
+					if (counter == 5) {
+						const list = document.createElement('li');
+						list.classList.add('more-items');
+
+						list.innerHTML = `+ ${Object.keys(localBag).length - 5} more item(s)`;
+						headerBag.append(list);
+						break;
+					}
+
+					let size = '';
+					if (localBag[key].selectedSize != 'N/A') {
+						size =
+							'- ' + localBag[key].selectedSize[0].toUpperCase() + localBag[key].selectedSize.slice(1).toLowerCase();
+					}
+
+					const list = document.createElement('li');
+
+					list.classList.add('bag-navigation__added-item');
+					list.innerHTML = `
+								<a href="http://127.0.0.1:8000/store/product/${localBag[key].product_id}/" class="added-item__link">
+									<img src="${localBag[key].thumbnail}" alt="" class="added-item__img" />
+									<span class="added-item__name">${localBag[key].product_name} ${size}</span>
+								</a>
+							`;
+					headerBag.append(list);
+					counter = counter + 1;
+				}
+			}
+		}
+
+		// form
+		function validateFormOnSubmit(form) {
+			const inputBoxes = Array.from(document.querySelectorAll("input[required='']"));
+			const productSizeSelector = document.querySelector('#product-size');
+
+			form.addEventListener('submit', (e) => {
+				const warningElement = form.querySelector('.no-input-warning');
+
+				for (let i = 0; i < inputBoxes.length; i++) {
+					if (!inputBoxes[i].value) {
+						e.preventDefault();
+						inputBoxes[i].focus();
+						return;
+					}
+				}
+
+				if (warningElement) {
+					e.preventDefault();
+					warningElement.parentElement.querySelector('input').focus();
+					return;
+				}
+			});
+		}
+		function requirePatternOnLoadBlur(form) {
+			const inputBoxes = Array.from(form.querySelectorAll('input[pattern]'));
+
+			window.addEventListener('load', (e) => {
+				inputBoxes.forEach((inputBox) => {
+					requirePattern(null, inputBox);
+				});
+			});
+
+			inputBoxes.forEach((inputBox) => {
+				inputBox.addEventListener('blur', requirePattern.bind(null, event, inputBox));
+			});
+
+			function requirePattern(e, inputBox) {
+				const regexPattern = new RegExp(inputBox.pattern);
+
+				if (inputBox.value && !regexPattern.test(inputBox.value)) {
+					const warningElement = addWarning(inputBox);
+
+					inputBox.addEventListener('input', (e) => {
+						if (inputBox.value) {
+							warningElement.remove();
+							inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+						}
+					});
+				}
+			}
+		}
+
+		// set defaults
+		function setProductInfo(response) {
+			const contents = JSON.parse(JSON.stringify(response));
+
+			const productPageContainer = document.querySelector('.product-page__product');
+			const product_names = productPageContainer.querySelectorAll('.product__name');
+			const productPrices = productPageContainer.querySelectorAll('.product__price');
+
+			const productImagesContainer = document.querySelector('.product__images-wrapper');
+			const productImageNavigator = productImagesContainer.querySelector('.product__images-navigator');
+			const productImages = productImagesContainer.querySelector('.product__images');
+			const productImageIndicator = productImagesContainer.querySelector('.product__images-indicator');
+
+			product_names.forEach((product_name) => {
+				product_name.textContent = contents.name;
+			});
+
+			productPrices.forEach((productPrice) => {
+				productPrice.textContent = 'P' + contents.price;
+			});
+
+			productImages.innerHTML = '';
+			for (let i = 0; i < contents.images.length; i++) {
+				const div = document.createElement('div');
+				div.classList.add('product__image-wrapper');
+				div.innerHTML = `<img src="${contents.images[i].image}" alt="" class="product__image" />`;
+				productImages.append(div);
+
+				const span = document.createElement('span');
+				span.classList.add('indicator');
+				if (i == 0) {
+					span.classList.add('indicator--active');
+				}
+				productImageIndicator.append(span);
+			}
+
+			if (contents.images.length < 2) {
+				productImageNavigator.remove();
+			} else {
+				setImageFunctioning();
+			}
+
+			const notifyOptionContainer = document.querySelector('.product__notify-option-wrapper');
+			const purchaseOptionContainer = document.querySelector('.product__purchase-option-wrapper');
+			const productSizeSelector = purchaseOptionContainer.querySelector('#product-size');
+			const noticeAddToBag = document.querySelector('.notice--add-to-bag');
+
+			if (contents.total_stocks) {
+				if (Object.keys(contents.stocks).length > 1) {
+					const option = document.createElement('option');
+					option.innerText = 'CHOOSE A SIZE';
+					option.setAttribute('disabled', '');
+					option.setAttribute('selected', '');
+
+					for (const [key, value] of Object.entries(contents.stocks)) {
+						const option = document.createElement('option');
+						option.value = key;
+						option.name = 'size';
+						option.innerText = key + ` - Only ${value} remaining`;
+
+						if (!value) {
+							option.setAttribute('disabled', '');
+						}
+
+						productSizeSelector.append(option);
+					}
+				} else {
+					const option = document.createElement('option');
+					const key = Object.keys(contents.stocks)[0];
+					productSizeSelector.innerHTML = '';
+
+					option.innerText = key;
+					option.value = key;
+					option.setAttribute('selected', '');
+					productSizeSelector.append(option);
+					productSizeSelector.style.display = 'none';
+				}
+
+				const addToBagButton = document.querySelector('.product__add-to-bag-option .btn-submit');
+				addToBagButton.innerText = 'ADD TO BAG';
+
+				noticeAddToBag.innerHTML = `
+							<p>The color of the image and the actual product may differ.</p>
+							<p>Delays and out of stock may occur due to order congestion and supply circumstances.</p>
+							`;
+			} else {
+				notifyOptionContainer.style.display = 'block';
+				purchaseOptionContainer.style.display = 'none';
+				noticeAddToBag.style.display = 'none';
+			}
+
+			const productDescriptionContainers = Array.from(document.querySelectorAll('.product__description-wrapper'));
+
+			productDescriptionContainers.forEach((productDescriptionContainer) => {
+				productDescriptionContainer.innerHTML = '';
+				const div = document.createElement('div');
+				div.classList.add('product__description');
+				div.innerHTML = contents.description;
+
+				productDescriptionContainer.append(div);
+			});
+
+			function setImageFunctioning() {
+				const productPage = document.querySelector('.product-page');
+				const prevButton = productPage.querySelector('.navigator--left');
+				const nextButton = productPage.querySelector('.navigator--right');
+				const imagesContainer = productPage.querySelector('.product__images');
+				const images = imagesContainer.children;
+				const imagesIndicators = Array.from(productPage.querySelector('.product__images-indicator').children);
+
+				let currentImageIndex = 0;
+
+				nextButton.addEventListener('click', (e) => {
+					moveImagesContainer(currentImageIndex + 1);
+				});
+
+				prevButton.addEventListener('click', (e) => {
+					moveImagesContainer(currentImageIndex - 1);
+				});
+
+				imagesIndicators.forEach((indicator) => {
+					indicator.addEventListener('click', (e) => {
+						moveImagesContainer(imagesIndicators.indexOf(e.target));
+					});
+				});
+
+				function moveImagesContainer(toImageIndex) {
+					imagesIndicators[currentImageIndex].classList.remove('indicator--active');
+
+					if (toImageIndex > images.length - 1) {
+						currentImageIndex = 0;
+					} else if (toImageIndex < 0) {
+						currentImageIndex = images.length - 1;
+					} else {
+						currentImageIndex = toImageIndex;
+					}
+
+					imagesContainer.style.transform = 'translateX(' + currentImageIndex * -100 + '%)';
+					imagesIndicators[currentImageIndex].classList.add('indicator--active');
+				}
+			}
+		}
+
+		// utilities
+		function addWarning(inputBox, message = null) {
+			const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
+			let warningMessage = null;
+
+			if (label) {
+				warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
+			} else if (message) {
+				warningMessage = message;
+			} else {
+				warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
+			}
+
+			const warningElement = document.createElement('p');
+			const warningText = document.createTextNode(warningMessage);
+
+			warningElement.appendChild(warningText);
+			warningElement.classList.add('no-input-warning');
+			inputBox.parentElement.appendChild(warningElement, inputBox);
+			inputBox.style.borderColor = 'red';
+
+			return warningElement;
+		}
+		function resetShoppingBag() {
+			localStorage.setItem('surlShoppingBag', JSON.stringify({}));
+			localStorage.setItem('surlCurrentCartID', 1);
+		}
+	})();
+</script>
+{% endblock %} {% block script_two %}
+<script></script>
+<script></script>
+{% endblock %}
