@@ -1,0 +1,8 @@
+{% extends 'store/base.html' %} {% load static %} {% block title %} Thank you | SURL {% endblock %} {% block main %}
+<main class="message-page">
+	<img class="message-page__image" src="{% static 'icons/thank-you-heart.svg' %}" alt="" />
+	<h1 class="message-page__title">Thank you for shopping with us.</h1>
+	<p class="message-page__text">We'll process your order immediately. <span>Your reference number is {{id}}.</span></p>
+	<p class="message-page__text">Click <a href="http://127.0.0.1:8000/store/">here</a> to go back to the store.</p>
+</main>
+{% endblock %}

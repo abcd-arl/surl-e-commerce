@@ -18,8 +18,21 @@ def store(response):
 
 
 def product(response, id):
-    url = urlopen("http://127.0.0.1:8000/api/product/{}/".format(str(id)))
-    
-    data = json.loads(url.read())
-    print(data)
     return render(response, 'store/product.html', {'id': id})
+
+
+def bag(response):
+    return render(response, 'store/bag.html', {})
+
+
+def checkout(response):
+    return render(response, 'store/checkout.html', {})
+
+
+def thankyou(response, id):
+    return render(response, 'store/thank-you-for-shopping.html', {'id': id})
+
+
+def ongoing(response):
+    return render(response, 'store/ongoing.html', {})
+    

@@ -1,0 +1,447 @@
+{% extends 'store/base.html' %} {% load static %} {% block title %} Shopping Bag | SURL {% endblock %} {% block main %}
+<main class="shopping-bag-page">
+	<section class="to-checkout section">
+		<div class="section__title">CHECKOUT</div>
+		<dic class="section__body">
+			<div class="skeleton skeleton--text"></div>
+			<div class="skeleton skeleton--text"></div>
+			<div class="skeleton skeleton--text skeleton--text--md"></div>
+		</dic>
+	</section>
+	<section class="shopping-bag section">
+		<div class="section__title"> SHOPPING BAG </div>
+		<div class="section__body">
+			<div class="shopping-bag__header">
+				<div class="skeleton skeleton--text skeleton--text--sm"></div>
+				<div class="skeleton skeleton--text skeleton--text--sm"></div>
+			</div>
+			<div class="shopping-bag__body">
+				<ol class="shopping-bag__items">
+					<li class="shopping-bag__item">
+						<div class="item__image-wrapper-outer">
+							<div class="item__image-wrapper-inner"> </div>
+						</div>
+						<div class="item__texts-price-options-wrapper">
+							<div class="item__texts-price-wrapper">
+								<div class="skeleton skeleton--text skeleton--text--md"></div>
+								<div class="skeleton skeleton--text skeleton--text--sm"></div>
+							</div>
+							<div class="item__other-options">
+								<div class="skeleton skeleton--text skeleton--text--sm"></div>
+							</div>
+						</div>
+					</li>
+					<li class="shopping-bag__item">
+						<div class="item__image-wrapper-outer">
+							<div class="item__image-wrapper-inner"> </div>
+						</div>
+						<div class="item__texts-price-options-wrapper">
+							<div class="item__texts-price-wrapper">
+								<div class="skeleton skeleton--text skeleton--text--md"></div>
+								<div class="skeleton skeleton--text skeleton--text--sm"></div>
+							</div>
+							<div class="item__other-options">
+								<div class="skeleton skeleton--text skeleton--text--sm"></div>
+							</div>
+						</div>
+					</li>
+					<li class="shopping-bag__item">
+						<div class="item__image-wrapper-outer">
+							<div class="item__image-wrapper-inner"> </div>
+						</div>
+						<div class="item__texts-price-options-wrapper">
+							<div class="item__texts-price-wrapper">
+								<div class="skeleton skeleton--text skeleton--text--md"></div>
+								<div class="skeleton skeleton--text skeleton--text--sm"></div>
+							</div>
+							<div class="item__other-options">
+								<div class="skeleton skeleton--text skeleton--text--sm"></div>
+							</div>
+						</div>
+					</li>
+				</ol>
+			</div>
+			<div class="shopping-bag__footer">
+				<div class="footer__line">
+					<div class="skeleton skeleton--text skeleton--text--sm"></div>
+					<div class="skeleton skeleton--text skeleton--text--sm"></div>
+				</div>
+				<div class="footer__line">
+					<div class="skeleton skeleton--text skeleton--text--sm"></div>
+					<div class="skeleton skeleton--text skeleton--text--sm"></div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+{% endblock %} {% block script %}
+<script>
+	(function () {
+		updateAndTransferLocalBag();
+
+		function updateAndTransferLocalBag() {
+			const url = 'http://127.0.0.1:8000/api/inventory/';
+
+			fetch(url)
+				.then((inventory) => {
+					return inventory.json();
+				})
+				.then((inventory) => {
+					const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+					const formattedInventory = getFormattedInventory(inventory);
+
+					updateLocalBagItemsAvailability(formattedInventory);
+					addItemsFromLocalBagToHeaderBag(formattedInventory);
+					setShoppingBag(formattedInventory);
+					setForm();
+
+					function updateLocalBagItemsAvailability(formattedInventory) {
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+
+						for (const [key, value] of Object.entries(localBag)) {
+							if (!formattedInventory[String([value.product_id, value.selectedSize])].stocks) {
+								value.isIncluded = false;
+							}
+						}
+
+						localStorage.surlShoppingBag = JSON.stringify(localBag);
+					}
+
+					function addItemsFromLocalBagToHeaderBag(formattedInventory) {
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+
+						const headerBagNotification = document.querySelector('.bag-navigation-notif');
+						const bagName = document.querySelector('#header-bag-name');
+
+						const headerBagContainer = document.querySelector('.bag-navigation__added-items-wrapper');
+						const headerBag = document.querySelector('.bag-navigation__added-items');
+
+						const totalIncludedItems = getTotalIncludedItems();
+
+						if (!totalIncludedItems) {
+							headerBagContainer.style.display = 'none';
+							headerBagNotification.style.display = 'none';
+							bagName.innerText = `Bag`;
+							return;
+						}
+
+						headerBagContainer.style.display = 'block';
+						headerBag.innerHTML = '';
+
+						headerBagNotification.style.display = 'flex';
+						headerBagNotification.innerText = totalIncludedItems;
+						bagName.innerText = `Bag (${totalIncludedItems})`;
+
+						let numOfIncluded = 0;
+						for (const key in localBag) {
+							if (numOfIncluded == 5) {
+								const list = document.createElement('li');
+								list.classList.add('more-items');
+
+								list.innerHTML = `+ ${totalIncludedItems - 5} more item(s)`;
+								headerBag.append(list);
+								break;
+							}
+
+							if (!localBag[key].isIncluded) {
+								continue;
+							}
+
+							let size = '';
+
+							if (localBag[key].selectedSize != 'N/A') {
+								size =
+									'- ' +
+									localBag[key].selectedSize[0].toUpperCase() +
+									localBag[key].selectedSize.slice(1).toLowerCase();
+							}
+
+							const productIDSize = String([localBag[key].product_id, localBag[key].selectedSize]);
+							const list = document.createElement('li');
+
+							list.classList.add('bag-navigation__added-item');
+							list.innerHTML = `
+								<a href="http://127.0.0.1:8000/store/product/${localBag[key].product_id}/" class="added-item__link">
+									<img src="${formattedInventory[productIDSize].thumbnail}" alt="" class="added-item__img" />
+									<span class="added-item__name">${formattedInventory[productIDSize].product_name} ${size}</span>
+								</a>
+							`;
+							headerBag.append(list);
+							numOfIncluded = numOfIncluded + 1;
+						}
+					}
+
+					function getFormattedInventory(inventory) {
+						let formattedInventory = {};
+						for (const [key, value] of Object.entries(inventory)) {
+							formattedInventory[String([value.product_id, value.size])] = {
+								id: value.id,
+								product_name: value.product,
+								price: value.price,
+								size: value.size,
+								stocks: value.stocks,
+								thumbnail: value.images.image,
+							};
+						}
+
+						return formattedInventory;
+					}
+
+					function setShoppingBag(formattedInventory) {
+						const localBag = JSON.parse(localStorage.surlShoppingBag);
+						const totalIncludedItems = getTotalIncludedItems();
+
+						if (Object.keys(localBag).length) {
+							const shoppingBagHeader = document.querySelector('.shopping-bag__header');
+							const shoppingBagItemsContainer = document.querySelector('.shopping-bag__items');
+							const checkoutSection = document.querySelector('.to-checkout .section__body');
+							shoppingBagItemsContainer.innerHTML = '';
+							shoppingBagHeader.innerHTML = `<span>ITEM</span><span>TOTAL</span>`;
+
+							if (totalIncludedItems) {
+								checkoutSection.innerHTML = `
+								<p class="to-checkout__instruction"> Enter your email address to continue </p>
+								<form name="to-checkout" class="to-checkout__form" novalidate>
+									<input
+										type="email"
+										name="'to-checkout"
+										placeholder="Email Address"
+										pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+										class="input-box"
+										required
+									/>
+									<input type="submit" name="to-checkout" value="PROCEED TO CHECKOUT" class="btn-submit" />
+								</form>
+							`;
+							} else {
+								checkoutSection.innerHTML = `You have no included items.`;
+							}
+
+							for (const [key, value] of Object.entries(localBag)) {
+								const list = document.createElement('li');
+								const k = String([value.product_id, value.selectedSize]);
+
+								list.classList.add('shopping-bag__item');
+
+								if (!formattedInventory[k].stocks) {
+									list.classList.add('shopping-bag__item--sold-out');
+								}
+								list.setAttribute('data-cart-id', key);
+								list.innerHTML = `
+									<div class="item__image-wrapper-outer">
+										<div class="item__image-wrapper-inner">
+											<a href="http://127.0.0.1:8000/store/product/${localBag[key].product_id}/">
+												<img src="${formattedInventory[k].thumbnail}" alt="" class="item__image" />
+											</a>
+										</div>
+									</div>
+									<div class="item__texts-price-options-wrapper">
+										<div class="item__texts-price-wrapper">
+											<div class="item__texts">
+												<div class="item__name"> ${formattedInventory[k].product_name} </div>
+												<div class="item__size-option">Size: ${formattedInventory[k].size}</div>
+											</div>
+											<div class="item__price">P${formatNumber(formattedInventory[k].price)}.00</div>
+										</div>
+										<div class="item__other-options">
+											<span class="item__do-not-include">Do not include at checkout</span>
+											<span class="item__remove">
+												<span class="remove__pre-display">Remove</span>
+												<span class="remove__question">Are you sure?</span>
+												<span class="remove__answer remove__answer--yes">Yes</span>
+												<span class="remove__answer remove__answer--no">No</span>
+											</span>
+										</div>
+									</div>
+								`;
+
+								if (!value.isIncluded) {
+									list.classList.add('shopping-bag__item--not-inlcuded');
+									const doNotIncludeOption = list.querySelector('.item__do-not-include');
+									doNotIncludeOption.innerText = 'Include at checkout';
+								}
+
+								shoppingBagItemsContainer.append(list);
+							}
+
+							const shoppingBagFooter = document.querySelector('.shopping-bag__footer');
+							let totalPrice = 0;
+							for (const [key, value] of Object.entries(localBag)) {
+								if (value.isIncluded) {
+									totalPrice = totalPrice + formattedInventory[String([value.product_id, value.selectedSize])].price;
+								}
+							}
+							totalPrice = formatNumber(totalPrice);
+							shoppingBagFooter.innerHTML = `
+								<div class="footer__line">
+									<span>Total</span>
+									<span>P${totalPrice}.00</span>
+								</div>
+								<div class="footer__line">
+									<span>Shipping estimate</span>
+									<span>Calculated at checkout</span>
+								</div>
+								<div class="footer__line">
+									<span><strong>Order Total</strong></span>
+									<span><strong>P${totalPrice}.00</strong></span>
+								</div>
+							`;
+							setDoNotIncludeOptions(formattedInventory);
+							setRemoveOptions(formattedInventory);
+						} else {
+							const shoppingBagSection = document.querySelector('.shopping-bag .section__body');
+							const checkoutSection = document.querySelector('.to-checkout .section__body');
+							shoppingBagSection.innerHTML = `
+								Uhmm... Your bag is empty hehe
+							`;
+							checkoutSection.innerHTML = ``;
+						}
+					}
+
+					function setRemoveOptions(formattedInventory) {
+						const localBag = JSON.parse(localStorage.surlShoppingBag);
+						const removeOptions = Array.from(document.querySelectorAll('.item__remove .remove__pre-display'));
+
+						removeOptions.forEach((removeOption) => {
+							removeOption.addEventListener('click', (e) => {
+								const removeOptionParent = removeOption.parentElement;
+								const item = removeOption.closest('.shopping-bag__item');
+								removeOptionParent.classList.add('item__remove--answered');
+
+								if (removeOptionParent.classList.contains('item__remove--answered')) {
+									const yes = removeOptionParent.querySelector('.remove__answer--yes');
+									const no = removeOptionParent.querySelector('.remove__answer--no');
+
+									yes.addEventListener('click', (e) => {
+										delete localBag[item.getAttribute('data-cart-id')];
+										localStorage.setItem('surlShoppingBag', JSON.stringify(localBag));
+										setShoppingBag(formattedInventory);
+										addItemsFromLocalBagToHeaderBag(formattedInventory);
+										e.stopPropagation();
+									});
+
+									no.addEventListener('click', (e) => {
+										removeOptionParent.classList.remove('item__remove--answered');
+									});
+								}
+							});
+						});
+					}
+
+					function setDoNotIncludeOptions(formattedInventory) {
+						const localBag = JSON.parse(localStorage.surlShoppingBag);
+						const doNotIncludeOptions = Array.from(document.querySelectorAll('.item__do-not-include'));
+						doNotIncludeOptions.forEach((doNotIncludeOption) => {
+							doNotIncludeOption.addEventListener('click', (e) => {
+								const item = doNotIncludeOption.closest('.shopping-bag__item');
+								item.classList.toggle('shopping-bag__item--not-inlcuded');
+
+								if (item.classList.contains('shopping-bag__item--not-inlcuded')) {
+									doNotIncludeOption.innerText = 'Include at checkout';
+									localBag[item.getAttribute('data-cart-id')].isIncluded = false;
+								} else {
+									doNotIncludeOption.innerText = 'Do not include at checkout';
+									localBag[item.getAttribute('data-cart-id')].isIncluded = true;
+								}
+
+								localStorage.setItem('surlShoppingBag', JSON.stringify(localBag));
+								addItemsFromLocalBagToHeaderBag(formattedInventory);
+								setShoppingBag(formattedInventory);
+							});
+						});
+					}
+
+					function formatNumber(x) {
+						return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					}
+
+					function getTotalIncludedItems() {
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+
+						let totalIncludedItems = 0;
+						for (const [key, value] of Object.entries(localBag)) {
+							if (value.isIncluded) {
+								totalIncludedItems = totalIncludedItems + 1;
+							}
+						}
+						return totalIncludedItems;
+					}
+				});
+		}
+
+		function setForm() {
+			const form = document.querySelector("form[name='to-checkout']");
+
+			requirePatternOnLoadBlur(form);
+			validateFormOnSubmit(form);
+
+			function validateFormOnSubmit(form) {
+				const inputBoxes = Array.from(document.querySelectorAll("input[required='']"));
+
+				form.addEventListener('submit', (e) => {
+					e.preventDefault();
+					const warningElement = form.querySelector('.no-input-warning');
+
+					for (let i = 0; i < inputBoxes.length; i++) {
+						if (!inputBoxes[i].value) {
+							inputBoxes[i].focus();
+							return;
+						}
+					}
+
+					if (warningElement) {
+						warningElement.parentElement.querySelector('input').focus();
+						return;
+					}
+
+					const userEmail = document.querySelector('.to-checkout__form .input-box').value;
+
+					sessionStorage.setItem('surlToken', true);
+					sessionStorage.setItem('surlUserEmail', userEmail);
+					window.location.replace('http://127.0.0.1:8000/store/checkout/');
+				});
+			}
+
+			function requirePatternOnLoadBlur(form) {
+				const inputBoxes = Array.from(form.querySelectorAll('input[pattern]'));
+
+				window.addEventListener('load', (e) => {
+					inputBoxes.forEach((inputBox) => {
+						requirePattern(null, inputBox);
+					});
+				});
+
+				inputBoxes.forEach((inputBox) => {
+					inputBox.addEventListener('blur', requirePattern.bind(null, event, inputBox));
+				});
+
+				function requirePattern(e, inputBox) {
+					const regexPattern = new RegExp(inputBox.pattern);
+
+					if (inputBox.value && !regexPattern.test(inputBox.value)) {
+						const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
+						let warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
+
+						if (label) warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
+
+						const warningElement = document.createElement('p');
+						const warningText = document.createTextNode(warningMessage);
+
+						warningElement.appendChild(warningText);
+						warningElement.classList.add('no-input-warning');
+						inputBox.parentElement.appendChild(warningElement, inputBox);
+						inputBox.style.borderColor = 'red';
+
+						inputBox.addEventListener('input', (e) => {
+							if (inputBox.value) {
+								warningElement.remove();
+								inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+							}
+						});
+					}
+				}
+			}
+		}
+	})();
+</script>
+{% endblock %}

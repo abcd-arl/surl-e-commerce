@@ -37,13 +37,13 @@
 	</template>
 	<section class="store__products"> </section>
 </main>
-{% endblock %} {% block script_one %}
+{% endblock %} {% block script %}
 <script>
 	console.log('hello');
 	(function () {
-		let currentCategory = 'Album';
 		setStoreCategories();
 		setSkeletonLoading();
+		updateAndTransferLocalBag();
 
 		function setSkeletonLoading() {
 			const storeProductsContainer = document.querySelector('.store__products');
@@ -59,16 +59,26 @@
 		function setStoreCategories() {
 			const storeCategories = Array.from(document.querySelector('.store__categories').children);
 
+			let currentCategory = 'Album';
+			if (sessionStorage.surlCurrentStoreCategory) {
+				currentCategory = sessionStorage.surlCurrentStoreCategory;
+				console.log(currentCategory);
+			}
+
 			window.addEventListener('load', (e) => {
 				const event = new Event('click');
-				storeCategories[0].dispatchEvent(event);
+				if (currentCategory == 'Album') {
+					storeCategories[0].dispatchEvent(event);
+				} else {
+					storeCategories[1].dispatchEvent(event);
+				}
 			});
 
 			storeCategories[0].addEventListener('click', (e) => {
 				if (e.target.getAttribute('aria-selected')) {
 					e.target.setAttribute('aria-selected', true);
 					storeCategories[1].setAttribute('aria-selected', false);
-					currentCategory = 'Album';
+					currentCategory = sessionStorage.surlCurrentStoreCategory = 'Album';
 					getStoreProducts(currentCategory);
 				}
 			});
@@ -77,7 +87,7 @@
 				if (e.target.getAttribute('aria-selected')) {
 					e.target.setAttribute('aria-selected', true);
 					storeCategories[0].setAttribute('aria-selected', false);
-					currentCategory = 'Merchandise	';
+					currentCategory = sessionStorage.surlCurrentStoreCategory = 'Merchandise';
 					getStoreProducts(currentCategory);
 				}
 			});
@@ -109,22 +119,18 @@
 		function getStoreProducts(currentCategory) {
 			setSkeletonLoading();
 
-			if (sessionStorage.getItem(`surl-store-${currentCategory}`) === null) {
-				const url = `http://127.0.0.1:8000/api/store/${currentCategory}/`;
-				fetch(url)
-					.then((response) => {
-						return response.json();
-					})
-					.then((response) => {
-						setStoreContents(response);
-						sessionStorage.setItem(`surl-store-${currentCategory}`, JSON.stringify(response));
-					})
-					.catch((err) => {
-						console.log('error message: ', err);
-					});
-			} else {
-				setStoreContents(JSON.parse(sessionStorage.getItem(`surl-store-${currentCategory}`)));
-			}
+			const url = `http://127.0.0.1:8000/api/store/${currentCategory}/`;
+			fetch(url)
+				.then((response) => {
+					return response.json();
+				})
+				.then((response) => {
+					setStoreContents(response);
+					sessionStorage.setItem(`surl-store-${currentCategory}`, JSON.stringify(response));
+				})
+				.catch((err) => {
+					console.log('error message: ', err);
+				});
 		}
 
 		function sortContents(response, sortBy, sortIn) {
@@ -180,9 +186,9 @@
 
 			for (let i = 0; i < products.length; i++) {
 				const product = storeProductTemplate.content.cloneNode(true);
-				product.getElementById('product-link').src = '';
+				product.getElementById('product-link').href = `http://127.0.0.1:8000/store/product/${products[i].id}/`;
 				product.getElementById('product-name').textContent = products[i].name;
-				product.getElementById('product-price').textContent = '₱' + products[i].price;
+				product.getElementById('product-price').textContent = '₱' + formatNumber(products[i].price);
 				product.getElementById('product-img').src = products[i].images[0].image;
 
 				if (!products[i].total_stocks) {
@@ -191,6 +197,128 @@
 
 				storeProductsContainer.append(product);
 			}
+		}
+
+		function formatNumber(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+
+		function updateAndTransferLocalBag() {
+			const url = 'http://127.0.0.1:8000/api/inventory/';
+
+			fetch(url)
+				.then((inventory) => {
+					return inventory.json();
+				})
+				.then((inventory) => {
+					const formattedInventory = getFormattedInventory(inventory);
+
+					updateLocalBagItemsAvailability(formattedInventory);
+					addItemsFromLocalBagToHeaderBag(formattedInventory);
+
+					function updateLocalBagItemsAvailability(formattedInventory) {
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+
+						for (const [key, value] of Object.entries(localBag)) {
+							if (!formattedInventory[String([value.product_id, value.selectedSize])].stocks) {
+								value.isIncluded = false;
+							}
+						}
+
+						localStorage.surlShoppingBag = JSON.stringify(localBag);
+					}
+
+					function addItemsFromLocalBagToHeaderBag(formattedInventory) {
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+
+						const headerBagNotification = document.querySelector('.bag-navigation-notif');
+						const bagName = document.querySelector('#header-bag-name');
+
+						const headerBagContainer = document.querySelector('.bag-navigation__added-items-wrapper');
+						const headerBag = document.querySelector('.bag-navigation__added-items');
+
+						const totalIncludedItems = getTotalIncludedItems();
+
+						if (!totalIncludedItems) {
+							headerBagContainer.style.display = 'none';
+							headerBagNotification.style.display = 'none';
+							return;
+						}
+
+						headerBagContainer.style.display = 'block';
+						headerBag.innerHTML = '';
+
+						headerBagNotification.style.display = 'flex';
+						headerBagNotification.innerText = totalIncludedItems;
+						bagName.innerText = `Bag (${totalIncludedItems})`;
+
+						let numOfIncluded = 0;
+						for (const key in localBag) {
+							if (numOfIncluded == 5) {
+								const list = document.createElement('li');
+								list.classList.add('more-items');
+
+								list.innerHTML = `+ ${totalIncludedItems - 5} more item(s)`;
+								headerBag.append(list);
+								break;
+							}
+
+							if (!localBag[key].isIncluded) {
+								continue;
+							}
+
+							let size = '';
+
+							if (localBag[key].selectedSize != 'N/A') {
+								size =
+									'- ' +
+									localBag[key].selectedSize[0].toUpperCase() +
+									localBag[key].selectedSize.slice(1).toLowerCase();
+							}
+
+							const productIDSize = String([localBag[key].product_id, localBag[key].selectedSize]);
+							const list = document.createElement('li');
+
+							list.classList.add('bag-navigation__added-item');
+							list.innerHTML = `
+								<a href="http://127.0.0.1:8000/store/product/${localBag[key].product_id}/" class="added-item__link">
+									<img src="${formattedInventory[productIDSize].thumbnail}" alt="" class="added-item__img" />
+									<span class="added-item__name">${formattedInventory[productIDSize].product_name} ${size}</span>
+								</a>
+							`;
+							headerBag.append(list);
+							numOfIncluded = numOfIncluded + 1;
+						}
+					}
+
+					function getTotalIncludedItems() {
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+
+						let totalIncludedItems = 0;
+						for (const [key, value] of Object.entries(localBag)) {
+							if (value.isIncluded) {
+								totalIncludedItems = totalIncludedItems + 1;
+							}
+						}
+						return totalIncludedItems;
+					}
+
+					function getFormattedInventory(inventory) {
+						let formattedInventory = {};
+						console.log(inventory);
+						for (const [key, value] of Object.entries(inventory)) {
+							formattedInventory[String([value.product_id, value.size])] = {
+								product_name: value.product,
+								price: value.price,
+								size: value.size,
+								stocks: value.stocks,
+								thumbnail: value.images.image,
+							};
+						}
+
+						return formattedInventory;
+					}
+				});
 		}
 	})();
 </script>

@@ -1,11 +1,8 @@
-from itertools import product
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from django.http import JsonResponse
-
-from store.api.serializers import ProductAllSerializer, ProductSerializer, InventorySerializer
+from store.api.serializers import ProductAllSerializer, ProductSerializer, InventorySerializer, NotifySerializer, OrderSerializer, OrderItemSerializer
 from store import models
 
 @api_view(['GET'])
@@ -42,3 +39,48 @@ def api_inventory(request):
 
     serializer = InventorySerializer(inventory, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def api_notify(request):
+    serializer = NotifySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def api_purchase(request):
+    serializer = OrderSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def api_add_purchase_item(request):
+    serializer = OrderItemSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        item = models.Inventory.objects.get(id=serializer.data['item'])
+        item.stocks = item.stocks - 1
+        item.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+    # if request.method == 'PUT':
+    #     try:
+    #         inventory = models.Inventory.objects.get(id=id)
+    #     except:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    #     serializer = InventorySerializer(inventory, data=request.data)
+    #     data = {}
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+    # return Response(status=status.HTTP_400_BAD_REQUEST)

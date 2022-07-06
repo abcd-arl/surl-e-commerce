@@ -18,7 +18,9 @@
 					<button class="btn-icon"><img src="{% static 'icons/menu.svg' %}" alt="menu icon" /></button>
 				</li>
 				<li class="header__item">
-					<a href="index.html" class="logo-surl"><img src="{% static 'icons/logo-surl.svg' %}" alt="surl logo" /></a>
+					<a href="http://127.0.0.1:8000/ongoing/" class="logo-surl"
+						><img src="{% static 'icons/logo-surl.svg' %}" alt="surl logo"
+					/></a>
 				</li>
 				<li class="header__item primary-navigation-wrapper">
 					<nav class="primary-navigation">
@@ -26,10 +28,10 @@
 							<img src="{% static 'icons/close.svg' %}" alt="" />
 						</button>
 						<ul class="primary-navigation__items">
-							<li class="primary-navigation__item"><a href="">Music</a></li>
-							<li class="primary-navigation__item"><a href="">Shows</a></li>
-							<li class="primary-navigation__item"><a href="">Store</a></li>
-							<li class="primary-navigation__item"><a href="">About us</a></li>
+							<li class="primary-navigation__item"><a href="http://127.0.0.1:8000/ongoing/">Music</a></li>
+							<li class="primary-navigation__item"><a href="http://127.0.0.1:8000/ongoing/">Shows</a></li>
+							<li class="primary-navigation__item"><a href="http://127.0.0.1:8000/store/">Store</a></li>
+							<li class="primary-navigation__item"><a href="http://127.0.0.1:8000/ongoing/">About us</a></li>
 							<li class="primary-navigation__item primary-navigation__search">
 								<form action="" id="header-search-form" class="search__form visibility-hidden">
 									<input type="text" placeholder="SEARCH" class="search__text" />
@@ -60,7 +62,7 @@
 								</ul>
 							</li>
 							<li class="bag-navigation__item">
-								<a href="" class="item__link">
+								<a href="http://127.0.0.1:8000/store/bag/" class="item__link">
 									<img src="{% static 'icons/shopping-bag.svg' %}" alt="" class="item__icon" />
 									<span id="header-bag-name" class="item__name">Bag</span>
 								</a>
@@ -142,4 +144,4 @@
 	})();
 </script>
 
-{% block script_one %} {% endblock %} {% block script_two %} {% endblock %}
+{% block script %} {% endblock %}

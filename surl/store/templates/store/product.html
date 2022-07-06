@@ -60,10 +60,12 @@
 							<input type="submit" value="NOTIFY ME" name="notify-me" class="btn-submit" />
 						</form>
 						<p class="notice">By clicking 'Notify Me', you agree on our Terms and Services.</p>
-						<!-- <p class="notify-option__pretext notify-option__pretext--submitted">
+					</div>
+					<div class="product__notify-submitted">
+						<p class="notify-option__pretext notify-option__pretext--submitted">
 							We'll let you know as soon as this becomes available!
 						</p>
-						<p class="notify-option__pretext">For now, you may click <a href="">here</a> to browse other items.</p> -->
+						<p class="notify-option__pretext">For now, you may click <a href="">here</a> to browse other items.</p>
 					</div>
 				</div>
 				<div class="product__purchase-option-wrapper">
@@ -137,12 +139,12 @@
 			<div class="other-information__seller"></div>
 		</div> -->
 </main>
-{% endblock %} {% block script_one %}
+{% endblock %} {% block script %}
 <script>
 	(function () {
 		// resetShoppingBag();
 		getProductInfo();
-		addItemToHeaderShoppingBag();
+		updateAndTransferLocalBag();
 
 		function getProductInfo() {
 			const url = `http://127.0.0.1:8000/api/product/{{id}}/`;
@@ -165,7 +167,7 @@
 		}
 
 		// add to bag
-		function validateOnAddToBag(response) {
+		function validateOnAddToBag(productContents) {
 			const productSizeSelector = document.querySelector('#product-size');
 			const addToBagButton = document.querySelector('.product__add-to-bag-option .btn-submit');
 			let warningElement = null;
@@ -181,13 +183,14 @@
 						warningElement.remove();
 					});
 				} else {
-					const result = addItemToLocalStorage(response);
+					const result = addItemToLocalStorage(productContents);
 					if (result == 'max-limit') {
-						warningElement = addWarning(addToBagButton, 'Sorry, maximum of three (3) for every item per order');
+						warningElement = addWarning(addToBagButton, 'Sorry, maximum of three (3) for every item per bag');
 					} else if (result == 'max-stocks') {
 						warningElement = addWarning(addToBagButton, 'No more stocks left');
 					} else {
-						addItemToHeaderShoppingBag();
+						// addItemToHeaderShoppingBag(productContents);
+						updateAndTransferLocalBag();
 					}
 				}
 			});
@@ -203,8 +206,10 @@
 				return true;
 			}
 		}
-		function addItemToLocalStorage(response) {
-			const contents = JSON.parse(JSON.stringify(response));
+
+		function addItemToLocalStorage(productContents) {
+			const productSizeSelector = document.querySelector('#product-size');
+			const selectedOption = productSizeSelector.options[productSizeSelector.selectedIndex].value;
 
 			if (!localStorage.getItem('surlShoppingBag')) {
 				localStorage.setItem('surlShoppingBag', JSON.stringify({}));
@@ -215,21 +220,12 @@
 			}
 
 			const localBag = JSON.parse(localStorage.surlShoppingBag);
-			const productSizeSelector = document.querySelector('#product-size');
-			const selectedOption = productSizeSelector.options[productSizeSelector.selectedIndex].value;
+			const contents = JSON.parse(JSON.stringify(productContents));
+			const numOfsimilarItemsInLocalBag = getNumOfSimilarItemsInLocalBag();
 
-			let countSimilarItems = {};
-			for (const [key, value] of Object.entries(localBag)) {
-				if (localBag[key].product_id in countSimilarItems) {
-					countSimilarItems[localBag[key].product_id] = countSimilarItems[localBag[key].product_id] + 1;
-				} else {
-					countSimilarItems[localBag[key].product_id] = 1;
-				}
-			}
-
-			if (contents.id in countSimilarItems && countSimilarItems[contents.id] == 3) {
+			if (contents.id in numOfsimilarItemsInLocalBag && numOfsimilarItemsInLocalBag[contents.id] == 3) {
 				return 'max-limit';
-			} else if (countSimilarItems[contents.id] == contents.stocks[selectedOption]) {
+			} else if (numOfsimilarItemsInLocalBag[contents.id] == contents.stocks[selectedOption]) {
 				return 'max-stocks';
 			}
 
@@ -238,101 +234,183 @@
 
 			localBag[currentCartID] = {
 				product_id: contents.id,
-				product_name: contents.name,
 				selectedSize: selectedOption,
 				isIncluded: true,
-				thumbnail: contents.images[0].image,
 			};
 
 			localStorage.surlShoppingBag = JSON.stringify(localBag);
 
 			return true;
 		}
-		function addItemToHeaderShoppingBag() {
+
+		function updateAndTransferLocalBag() {
 			const url = 'http://127.0.0.1:8000/api/inventory/';
 
 			fetch(url)
-				.then((response) => {
-					return response.json();
+				.then((inventory) => {
+					return inventory.json();
 				})
-				.then((response) => {
-					setIncludedItems(response);
-				});
+				.then((inventory) => {
+					const formattedInventory = getFormattedInventory(inventory);
 
-			const headerBagNotification = document.querySelector('.bag-navigation-notif');
-			const bagName = document.querySelector('#header-bag-name');
+					updateLocalBagItemsAvailability(formattedInventory);
+					addItemsFromLocalBagToHeaderBag(formattedInventory);
 
-			const headerBagContainer = document.querySelector('.bag-navigation__added-items-wrapper');
-			const headerBag = document.querySelector('.bag-navigation__added-items');
-			headerBag.innerHTML = '';
-			headerBagContainer.style.display = 'none';
+					function updateLocalBagItemsAvailability(formattedInventory) {
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
 
-			// this should be formatted in the backend?
-			function setIncludedItems(response) {
-				let totalIncludedItems = 0;
-				const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
-				let contentsFormatted = {};
-				for (let i = 0; i < response.length; i++) {
-					contentsFormatted[String([response[i].product_id, response[i].size])] = response[i].stocks;
-				}
-
-				if (Object.keys(localBag).length) {
-					for (const [key, value] of Object.entries(localBag)) {
-						if (!contentsFormatted[String([value.product_id, value.selectedSize])]) {
-							value.isIncluded = false;
+						for (const [key, value] of Object.entries(localBag)) {
+							if (!formattedInventory[String([value.product_id, value.selectedSize])].stocks) {
+								value.isIncluded = false;
+							}
 						}
 
-						if (localBag[key].isIncluded) {
-							totalIncludedItems = totalIncludedItems + 1;
+						localStorage.surlShoppingBag = JSON.stringify(localBag);
+					}
+
+					function addItemsFromLocalBagToHeaderBag(formattedInventory) {
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+
+						const headerBagNotification = document.querySelector('.bag-navigation-notif');
+						const bagName = document.querySelector('#header-bag-name');
+
+						const headerBagContainer = document.querySelector('.bag-navigation__added-items-wrapper');
+						const headerBag = document.querySelector('.bag-navigation__added-items');
+
+						const totalIncludedItems = getTotalIncludedItems();
+
+						if (!totalIncludedItems) {
+							headerBagContainer.style.display = 'none';
+							headerBagNotification.style.display = 'none';
+							return;
 						}
-					}
 
-					addToHeaderShoppingBag();
-				}
+						headerBagContainer.style.display = 'block';
+						headerBag.innerHTML = '';
 
-				if (totalIncludedItems) {
-					headerBagNotification.style.display = 'flex';
-					headerBagNotification.innerText = totalIncludedItems;
-					bagName.innerText = `Bag (${totalIncludedItems})`;
-				}
-			}
+						headerBagNotification.style.display = 'flex';
+						headerBagNotification.innerText = totalIncludedItems;
+						bagName.innerText = `Bag (${totalIncludedItems})`;
 
-			function addToHeaderShoppingBag() {
-				const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
-				const headerBagContainer = document.querySelector('.bag-navigation__added-items-wrapper');
-				const headerBag = document.querySelector('.bag-navigation__added-items');
-				headerBagContainer.style.display = 'block';
+						let numOfIncluded = 0;
+						for (const key in localBag) {
+							if (numOfIncluded == 5) {
+								const list = document.createElement('li');
+								list.classList.add('more-items');
 
-				counter = 0;
-				for (let key in localBag) {
-					if (counter == 5) {
-						const list = document.createElement('li');
-						list.classList.add('more-items');
+								list.innerHTML = `+ ${totalIncludedItems - 5} more item(s)`;
+								headerBag.append(list);
+								break;
+							}
 
-						list.innerHTML = `+ ${Object.keys(localBag).length - 5} more item(s)`;
-						headerBag.append(list);
-						break;
-					}
+							if (!localBag[key].isIncluded) {
+								continue;
+							}
 
-					let size = '';
-					if (localBag[key].selectedSize != 'N/A') {
-						size =
-							'- ' + localBag[key].selectedSize[0].toUpperCase() + localBag[key].selectedSize.slice(1).toLowerCase();
-					}
+							let size = '';
 
-					const list = document.createElement('li');
+							if (localBag[key].selectedSize != 'N/A') {
+								size =
+									'- ' +
+									localBag[key].selectedSize[0].toUpperCase() +
+									localBag[key].selectedSize.slice(1).toLowerCase();
+							}
 
-					list.classList.add('bag-navigation__added-item');
-					list.innerHTML = `
+							const productIDSize = String([localBag[key].product_id, localBag[key].selectedSize]);
+							const list = document.createElement('li');
+
+							list.classList.add('bag-navigation__added-item');
+							list.innerHTML = `
 								<a href="http://127.0.0.1:8000/store/product/${localBag[key].product_id}/" class="added-item__link">
-									<img src="${localBag[key].thumbnail}" alt="" class="added-item__img" />
-									<span class="added-item__name">${localBag[key].product_name} ${size}</span>
+									<img src="${formattedInventory[productIDSize].thumbnail}" alt="" class="added-item__img" />
+									<span class="added-item__name">${formattedInventory[productIDSize].product_name} ${size}</span>
 								</a>
 							`;
-					headerBag.append(list);
-					counter = counter + 1;
+							headerBag.append(list);
+							numOfIncluded = numOfIncluded + 1;
+						}
+					}
+
+					function getTotalIncludedItems() {
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+
+						let totalIncludedItems = 0;
+						for (const [key, value] of Object.entries(localBag)) {
+							if (value.isIncluded) {
+								totalIncludedItems = totalIncludedItems + 1;
+							}
+						}
+						return totalIncludedItems;
+					}
+
+					function getFormattedInventory(inventory) {
+						let formattedInventory = {};
+
+						for (const [key, value] of Object.entries(inventory)) {
+							formattedInventory[String([value.product_id, value.size])] = {
+								id: value.id,
+								product_name: value.product,
+								price: value.price,
+								size: value.size,
+								stocks: value.stocks,
+								thumbnail: value.images.image,
+							};
+						}
+
+						return formattedInventory;
+					}
+				});
+		}
+
+		function addItemToHeaderShoppingBag(productContents) {
+			const headerBagNotification = document.querySelector('.bag-navigation-notif');
+			const bagName = document.querySelector('#header-bag-name');
+			const headerBag = document.querySelector('.bag-navigation__added-items');
+
+			const productSizeSelector = document.querySelector('#product-size');
+			const selectedOption = productSizeSelector.options[productSizeSelector.selectedIndex].value;
+
+			const totalIncludedItems = getTotalIncludedItems();
+
+			if (totalIncludedItems > 6) {
+				headerBag.lastChild.innerHTML = `+ ${totalIncludedItems + 1 - 5} more item(s)`;
+				headerBagNotification.innerText = totalIncludedItems + 1;
+				bagName.innerText = `Bag (${totalIncludedItems + 1})`;
+			} else {
+				let size = '';
+				if (selectedOption.selectedSize != 'N/A') {
+					size = '- ' + selectedOption[0].toUpperCase() + selectedOption.slice(1).toLowerCase();
+				}
+
+				const productIDSize = String([productContents.id, selectedOption.selectedSize]);
+				const list = document.createElement('li');
+
+				list.classList.add('bag-navigation__added-item');
+				list.innerHTML = `
+								<a href="http://127.0.0.1:8000/store/product/${productContents.id}/" class="added-item__link">
+									<img src="${productContents.images[0].image}" alt="" class="added-item__img" />
+									<span class="added-item__name">${productContents.name} ${size}</span>
+								</a>
+							`;
+				headerBag.append(list);
+			}
+		}
+
+		function getNumOfSimilarItemsInLocalBag() {
+			const localBag = JSON.parse(localStorage.surlShoppingBag);
+			let numOfsimilarItems = {};
+
+			if (localBag) {
+				for (const [key, value] of Object.entries(localBag)) {
+					if (localBag[key].product_id in numOfsimilarItems) {
+						numOfsimilarItems[localBag[key].product_id] = numOfsimilarItems[localBag[key].product_id] + 1;
+					} else {
+						numOfsimilarItems[localBag[key].product_id] = 1;
+					}
 				}
 			}
+
+			return numOfsimilarItems;
 		}
 
 		// form
@@ -342,20 +420,66 @@
 
 			form.addEventListener('submit', (e) => {
 				const warningElement = form.querySelector('.no-input-warning');
-
+				e.preventDefault();
 				for (let i = 0; i < inputBoxes.length; i++) {
 					if (!inputBoxes[i].value) {
-						e.preventDefault();
 						inputBoxes[i].focus();
 						return;
 					}
 				}
 
 				if (warningElement) {
-					e.preventDefault();
 					warningElement.parentElement.querySelector('input').focus();
 					return;
 				}
+
+				function getCookie(name) {
+					let cookieValue = null;
+					if (document.cookie && document.cookie !== '') {
+						const cookies = document.cookie.split(';');
+						for (let i = 0; i < cookies.length; i++) {
+							const cookie = cookies[i].trim();
+							// Does this cookie string begin with the name we want?
+							if (cookie.substring(0, name.length + 1) === name + '=') {
+								cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+								break;
+							}
+						}
+					}
+					return cookieValue;
+				}
+
+				const csrftoken = getCookie('csrftoken');
+				const url = `http://127.0.0.1:8000/api/notify/`;
+				const userEmail = document.querySelector('.notify-option__form .input-box').value;
+
+				const notifyOption = document.querySelector('.product__notify-option');
+				const notifySubmitted = document.querySelector('.product__notify-submitted');
+
+				fetch(url, {
+					method: 'POST',
+					headers: {
+						'Content-type': 'application/json',
+						'X-CSRFToken': csrftoken,
+					},
+					body: JSON.stringify({
+						product: parseInt('{{id}}'),
+						email: userEmail,
+					}),
+				})
+					.then((response) => {
+						notifyOption.style.display = 'none';
+						notifySubmitted.style.display = 'block';
+					})
+					.catch((err) => {
+						notifySubmitted.innerHTML = `
+							<p class="notify-option__pretext notify-option__pretext--submitted">
+								Oh no! Something went wrong. Please refresh the page and try again.
+							</p>
+						`;
+
+						notifySubmitted.style.color = 'red';
+					});
 			});
 		}
 		function requirePatternOnLoadBlur(form) {
@@ -392,7 +516,7 @@
 			const contents = JSON.parse(JSON.stringify(response));
 
 			const productPageContainer = document.querySelector('.product-page__product');
-			const product_names = productPageContainer.querySelectorAll('.product__name');
+			const productNames = productPageContainer.querySelectorAll('.product__name');
 			const productPrices = productPageContainer.querySelectorAll('.product__price');
 
 			const productImagesContainer = document.querySelector('.product__images-wrapper');
@@ -400,12 +524,12 @@
 			const productImages = productImagesContainer.querySelector('.product__images');
 			const productImageIndicator = productImagesContainer.querySelector('.product__images-indicator');
 
-			product_names.forEach((product_name) => {
-				product_name.textContent = contents.name;
+			productNames.forEach((productName) => {
+				productName.textContent = contents.name;
 			});
 
 			productPrices.forEach((productPrice) => {
-				productPrice.textContent = 'P' + contents.price;
+				productPrice.textContent = 'P' + formatNumber(contents.price);
 			});
 
 			productImages.innerHTML = '';
@@ -476,6 +600,10 @@
 				notifyOptionContainer.style.display = 'block';
 				purchaseOptionContainer.style.display = 'none';
 				noticeAddToBag.style.display = 'none';
+
+				productNames.forEach((productName) => {
+					productName.classList.add('product__name--sold-out');
+				});
 			}
 
 			const productDescriptionContainers = Array.from(document.querySelectorAll('.product__description-wrapper'));
@@ -553,13 +681,17 @@
 
 			return warningElement;
 		}
+
+		function formatNumber(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+
 		function resetShoppingBag() {
 			localStorage.setItem('surlShoppingBag', JSON.stringify({}));
 			localStorage.setItem('surlCurrentCartID', 1);
 		}
 	})();
 </script>
-{% endblock %} {% block script_two %}
 <script></script>
 <script></script>
 {% endblock %}

@@ -1,413 +1,550 @@
-{% extends 'store/base.html' %} {% load static %} {% block title %} Product | SURL {% endblock %} {% block main %}
-<main class="product-page">
-	<div class="product-page__product">
-		<div class="product__left-section-wrapper">
-			<div class="product__left-section">
-				<h1 class="product__name">
-					<div class="skeleton skeleton--text skeleton--text--md"></div>
-				</h1>
-				<div class="product__price">
-					<div class="skeleton skeleton--text skeleton--text--sm"></div>
+{% load livereload_tags %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Checkout | SURL</title>
+		<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+		{% livereload_script %}
+	</head>
+	<body>
+		<header class="header--product-page header--checkout">
+			<a href="index.html" class="logo-surl"><img src="{% static 'icons/logo-surl.svg' %}" alt="surl logo" /></a>
+		</header>
+		<main class="checkout-page">
+			<section class="order-summary section">
+				<div class="order-summary__title section__title accordion-header">
+					<span>ORDER SUMMARY - 3 ITEMS</span>
+					<span class="btn-icon"><img src="{% static 'icons/plus.svg' %}" alt="" /></span>
 				</div>
-				<div class="product__description-wrapper">
-					<div class="product__description">
-						<div class="description__header"></div>
-						<div class="description__body">
-							<div class="skeleton skeleton--text"></div>
-							<div class="skeleton skeleton--text"></div>
-							<div class="skeleton skeleton--text skeleton--text--md"></div>
+				<div class="order-summary__body accordion-body">
+					<ol class="order-summary__items">
+						<li class="order-summary__item">
+							<div class="item__image-wrapper-outer">
+								<div class="item__image-wrapper-inner">
+									<img src="/album1.1.png" alt="" class="item__image" />
+									<!-- <img src="/album1.1.png" alt="" class="item__image" /> -->
+								</div>
+							</div>
+							<div class="item__texts-price-options-wrapper">
+								<div class="item__texts-price-wrapper">
+									<div class="item__texts">
+										<!-- <div class="item__type">ALBUM</div> -->
+										<div class="item__name">Beside [Single] 7" Vinyl </div>
+										<div class="item__size-option">Size: N/A</div>
+									</div>
+									<div class="item__price">P2,998.00</div>
+								</div>
+							</div>
+						</li>
+						<li class="order-summary__item">
+							<div class="item__image-wrapper-outer">
+								<div class="item__image-wrapper-inner">
+									<img src="/5.jpg" alt="" class="item__image" />
+									<!-- <img src="/album1.1.png" alt="" class="item__image" /> -->
+								</div>
+							</div>
+							<div class="item__texts-price-options-wrapper">
+								<div class="item__texts-price-wrapper">
+									<div class="item__texts">
+										<!-- <div class="item__type">ALBUM</div> -->
+										<div class="item__name">Beside [Single] 7" Vinyl </div>
+										<div class="item__size-option">Size: N/A</div>
+									</div>
+									<div class="item__price">P2,998.00</div>
+								</div>
+							</div>
+						</li>
+						<li class="order-summary__item">
+							<div class="item__image-wrapper-outer">
+								<div class="item__image-wrapper-inner">
+									<img src="/1.jpg" alt="" class="item__image" />
+									<!-- <img src="/album1.1.png" alt="" class="item__image" /> -->
+								</div>
+							</div>
+							<div class="item__texts-price-options-wrapper">
+								<div class="item__texts-price-wrapper">
+									<div class="item__texts">
+										<!-- <div class="item__type">ALBUM</div> -->
+										<div class="item__name">Beside [Single] 7" Vinyl </div>
+										<div class="item__size-option">Size: N/A</div>
+									</div>
+									<div class="item__price">P2,998.00</div>
+								</div>
+							</div>
+						</li>
+					</ol>
+				</div>
+				<div class="order-summary__footer">
+					<div class="footer__line">
+						<span>Total</span>
+						<span>P2,499.00</span>
+					</div>
+					<div class="footer__line">
+						<span>Shipping estimate</span>
+						<span>Calculated at checkout</span>
+					</div>
+					<div class="footer__line">
+						<span><strong>Order Total</strong></span>
+						<span><strong>P2,499.00</strong></span>
+					</div>
+				</div>
+			</section>
+			<section class="checkout-form-wrapper section">
+				<div class="section__title">
+					<span>CHECKOUT</span>
+				</div>
+				<form action="" class="checkout-form__form" name="checkout" novalidate>
+					<div id="shipping-address" class="form__subsection">
+						<div class="subsection__title"> SHIPPING ADDRESS </div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="first-name">First Name</label>
+								<input type="text" id="first-name" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="last-name">Last Name</label>
+								<input type="text" id="last-name" name="checkout" class="input-box" required />
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="phone-number">Phone Number</label>
+								<input
+									type="text"
+									id="phone-number"
+									name="checkout"
+									maxlength="17"
+									pattern="[+639][ ]\d{3}[ ]\d{4}[ ]\d{3}"
+									placeholder="+639 012 3456 789"
+									class="input-box"
+									required
+								/>
+							</div>
+							<div class="label-input-wrapper">
+								<label for="email-address">Email Address</label>
+								<input
+									type="email"
+									id="email-address"
+									name="checkout"
+									pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+									placeholder="email@example.com"
+									class="input-box"
+									required
+								/>
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="shipping-street-address">Street Address</label>
+								<input type="text" id="shipping-street-address" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="shipping-additional-address">Additional Address (Optional)</label>
+								<input type="text" id="shipping-additional-address" name="checkout" class="input-box" />
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="shipping-city-municipality">City or Municipality</label>
+								<input type="text" id="shipping-city-municipality" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="shipping-zip-code">Zip or Postal Code</label>
+								<input type="text" id="shipping-zip-code" name="checkout" class="input-box" required />
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="shipping-province">Province</label>
+								<input type="text" id="shipping-province" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="country">Country</label>
+								<input type="text" id="country" name="checkout" class="input-box" value="Philippines" disabled />
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-		<div class="product__images-wrapper">
-			<div class="product__images-navigator">
-				<button class="btn-icon navigator navigator--left">
-					<img src="{% static 'icons/caret-left.svg' %}" alt="" />
-				</button>
-				<button class="btn-icon navigator navigator--right">
-					<img src="{% static 'icons/caret-right.svg' %}" alt="" />
-				</button>
-			</div>
-			<div class="product__images">
-				<div class="loader-wrapper">
-					<div class="loader"></div>
-				</div>
-			</div>
-			<div class="product__images-indicator"></div>
-		</div>
-		<div class="product__right-section-wrapper">
-			<div class="product__right-section">
-				<h1 class="product__name">
-					<div class="skeleton skeleton--text skeleton--text--md"></div>
-				</h1>
-				<div class="product__price">
-					<div class="skeleton skeleton--text skeleton--text--sm"></div>
-				</div>
-				<div class="product__notify-option-wrapper">
-					<div class="product__notify-option">
-						<p class="notify-option__pretext">Get notified when this product is back in stock.</p>
-						<form action="" class="notify-option__form" name="notify-me" novalidate>
-							<input
-								type="email"
-								placeholder="Email Address"
-								class="input-box"
-								pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-								name="notify-me"
-								required
-							/>
-							<input type="submit" value="NOTIFY ME" name="notify-me" class="btn-submit" />
-						</form>
-						<p class="notice">By clicking 'Notify Me', you agree on our Terms and Services.</p>
-						<!-- <p class="notify-option__pretext notify-option__pretext--submitted">
-							We'll let you know as soon as this becomes available!
-						</p>
-						<p class="notify-option__pretext">For now, you may click <a href="">here</a> to browse other items.</p> -->
-					</div>
-				</div>
-				<div class="product__purchase-option-wrapper">
-					<div class="product__size-option">
-						<select name="size" id="product-size" class="input-box">
-							<option value="" disabled selected>CHOOSE A SIZE</option>
-						</select>
-					</div>
-					<div class="product__add-to-bag-option">
-						<button class="btn-submit"></button>
-					</div>
-				</div>
-				<div class="product__description-wrapper">
-					<div class="product__description">
-						<div class="description__header"></div>
-						<div class="description__body">
-							<div class="skeleton skeleton--text"></div>
-							<div class="skeleton skeleton--text"></div>
-							<div class="skeleton skeleton--text skeleton--text--md"></div>
+					<div class="form__subsection">
+						<div class="subsection__title"> CARD DETAILS </div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="card-number">Card Number</label>
+								<input
+									type="text"
+									id="card-number"
+									name="checkout"
+									class="input-box"
+									placeholder="1234 1234 1234 1234"
+									pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}"
+									maxlength="19"
+									required
+								/>
+								<div class="logos-wrapper">
+									<img src="icons/visa.svg" alt="" />
+									<img src="icons/mastercard.svg" alt="" />
+								</div>
+							</div>
+							<div class="label-input-wrapper">
+								<label for="expiration-date">Expiration Date</label>
+								<input
+									type="text"
+									id="expiration-date"
+									name="checkout"
+									placeholder="MM / YY"
+									maxlength="7"
+									class="input-box"
+									required
+								/>
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="card-holder-name">Card Holder's name</label>
+								<input type="text" id="card-holder-name" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="security-code">Security Code</label>
+								<input
+									type="text"
+									id="security-code"
+									name="checkout"
+									class="input-box"
+									pattern="[0-9]{3}"
+									placeholder="CVV"
+									required
+								/>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="notice notice--add-to-bag">
-					<div class="skeleton skeleton--text"></div>
-					<div class="skeleton skeleton--text"></div>
-					<div class="skeleton skeleton--text skeleton--text--md"></div>
-				</div>
-			</div>
-		</div>
-	</div>
+					<div id="billing-address" class="form__subsection">
+						<div class="subsection__title"> BILLING ADDRESS </div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper--checkbox">
+								<label for="same-as-shipping-ad">Same as shipping address</label>
+								<input type="checkbox" id="same-as-shipping-ad" name="checkout" required checked />
+							</div>
+						</div>
+						<div class="billing-address-inputs-wrapper">
+							<div class="subsection__inputs">
+								<div class="label-input-wrapper">
+									<label for="billing-street-address">Street Address</label>
+									<input type="text" id="billing-street-address" name="checkout" class="input-box" required />
+								</div>
+								<div class="label-input-wrapper">
+									<label for="billing-additional-address">Additional Address (Optional)</label>
+									<input type="text" id="billing-additional-address" name="checkout" class="input-box" />
+								</div>
+							</div>
+							<div class="subsection__inputs">
+								<div class="label-input-wrapper">
+									<label for="billing-city-municipality">City or Municipality</label>
+									<input type="text" id="billing-city-municipality" name="checkout" class="input-box" required />
+								</div>
+								<div class="label-input-wrapper">
+									<label for="billing-zip-code">Zip or Postal Code</label>
+									<input type="text" id="billing-zip-code" name="checkout" class="input-box" required />
+								</div>
+							</div>
+							<div class="subsection__inputs">
+								<div class="label-input-wrapper">
+									<label for="billing-province">Province</label>
+									<input type="text" id="billing-province" name="checkout" class="input-box" required />
+								</div>
+								<div class="label-input-wrapper">
+									<label for="country">Country</label>
+									<input type="text" id="country" name="checkout" class="input-box" value="Philippines" disabled />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form__subsection">
+						<div class="subsection__inputs">
+							<input type="submit" id="card-number" value="PLACE ORDER" name="checkout" class="btn-submit" required />
+						</div>
+					</div>
+				</form>
+			</section>
+		</main>
+	</body>
+	<script>
+		(function () {
+			const form = document.querySelector('form[name="checkout"]');
 
-	<!-- <div class="product__other-information">
-			<div class="other-information__shipping" style="margin-bottom: 100em">
-				<p><span>Delivery Company:</span> CJ Korea Express (1588-1255)</p>
-				<p><span>Delivery Area:</span> All regions of Korea</p>
-				<p>
-					<span>Shipping Cost:</span> One way 2,800 won (If the first delivery is free, 5,800 won is charged) / Free
-					with purchases of 30,000 won or more / Jeju additional 3,000 won, island areas other than Jeju additional
-					3,000 won
-				</p>
-				<p><span>Delivery Period:</span> Ships within 3 days from the date of payment</p>
-			</div>
-			<div class="other-information__exchange-return">
-				<p>
-					<span>Shopping Cost:</span>
-					Simple change of mind: round-trip delivery fee 5,800 won
-				</p>
-				<p>
-					<span>Return Address:</span>
-					Happy Robot Record, 3rd floor, 78 Seogang-ro, Mapo-gu, Seoul (MPMG) (Right: 04099)
-				</p>
-				<div>
-					<span>Request period according to the reason for return/exchange</span>
-					<ul>
-						<li>
-							<p>
-								Buyer's simple change of mind within 7 days of receipt of the product (Buyer bears the return shipping
-								cost)
-							</p>
-						</li>
-						<li>
-							<p>
-								In the case of product defects, returns/exchanges are not allowed within 3 months of receipt of the
-								product or within 30 days of knowing that the product is different from the indication/advertisement
-								(seller bears the return shipping cost)
-							</p>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="other-information__seller"></div>
-		</div> -->
-</main>
-{% endblock %} {% block script_one %}
-<script>
-	const form = document.querySelector("form[name='notify-me']");
+			addCharOnKeyUp(document.querySelector('#phone-number'), ' ');
+			addCharOnKeyUp(document.querySelector('#card-number'), ' ', [4, 9, 14]);
+			addCharOnKeyUp(document.querySelector('#expiration-date'), ' / ', [2]);
 
-	requirePatternOnLoadBlur(form);
-	validateFormOnSubmit(form);
+			setExpirationDatePattern();
+			setPhoneNumberInitial();
 
-	validateOnAddToBag();
+			requirePatternOnLoadBlur(form);
+			requireInputOnBlur(form);
+			validateFormOnSubmit(form);
 
-	function validateOnAddToBag() {
-		const productSizeContainer = document.querySelector('#product-size');
+			setAddresses();
 
-		if (!hasChosenSize()) {
-			productSizeContainer.style.borderColor = 'red';
-		}
-	}
+			function setPhoneNumberInitial() {
+				const phoneNum = document.querySelector('#phone-number');
 
-	function validateFormOnSubmit(form) {
-		const inputBoxes = Array.from(document.querySelectorAll("input[required='']"));
-		const productSizeContainer = document.querySelector('#product-size');
-
-		form.addEventListener('submit', (e) => {
-			const warningElement = form.querySelector('.no-input-warning');
-
-			for (let i = 0; i < inputBoxes.length; i++) {
-				if (!inputBoxes[i].value) {
-					e.preventDefault();
-					inputBoxes[i].focus();
-					return;
-				}
+				phoneNum.addEventListener('click', (e) => {
+					if (!e.target.value) e.target.value = '+639 ';
+				});
 			}
 
-			if (warningElement) {
-				e.preventDefault();
-				warningElement.parentElement.querySelector('input').focus();
-				return;
-			}
-		});
-	}
+			function setExpirationDatePattern() {
+				const expDate = document.querySelector('#expiration-date');
+				const dt = new Date();
+				const currentMonth = parseInt(dt.getMonth() + 1)
+					.toString()
+					.padStart(2, '0');
+				const currentYear = parseInt(dt.getFullYear().toString().substr(-2));
 
-	function requirePatternOnLoadBlur(form) {
-		const inputBoxes = Array.from(form.querySelectorAll('input[pattern]'));
+				expDate.pattern = `(0[1-9]|1[0-2]) \/ ([0-9]{2})`;
 
-		window.addEventListener('load', (e) => {
-			inputBoxes.forEach((inputBox) => {
-				requirePattern(null, inputBox);
-			});
-		});
+				expDate.addEventListener('input', (e) => {
+					if (e.target.value.length == 1 && parseInt(e.target.value) > 1) {
+						e.target.value = 0 + e.target.value + ' / ';
+					}
+				});
 
-		inputBoxes.forEach((inputBox) => {
-			inputBox.addEventListener('blur', requirePattern.bind(null, event, inputBox));
-		});
+				window.addEventListener('load', (e) => {
+					if (expDate.value) {
+						const event = new Event('blur');
+						expDate.dispatchEvent(event);
+					}
+				});
 
-		function requirePattern(e, inputBox) {
-			const regexPattern = new RegExp(inputBox.pattern);
+				expDate.addEventListener('blur', (e) => {
+					const enteredMonths = parseInt(e.target.value.slice(0, 2));
+					const enteredYear = parseInt(e.target.value.slice(5));
 
-			if (inputBox.value && !regexPattern.test(inputBox.value)) {
-				// const warningElement = addWarning(inputBox);
+					if (
+						(e.target.value.length == 7 && (enteredYear > currentYear + 4 || enteredYear < currentYear)) ||
+						(enteredMonths <= parseInt(currentMonth) && enteredYear == 22)
+					) {
+						addWarning(e.target);
+					} else {
+						const warningElements = expDate.parentElement.querySelectorAll('.no-input-warning');
 
-				inputBox.addEventListener('input', (e) => {
-					if (inputBox.value) {
-						// warningElement.remove();
-						inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+						if (warningElements) {
+							warningElements.forEach((warningElement) => {
+								warningElement.remove();
+							});
+							expDate.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+						}
 					}
 				});
 			}
-		}
-	}
 
-	const inputBoxes = Array.from(form.querySelectorAll('input[pattern]'));
+			function removeWarningsInBilling() {
+				const warningElements = form.querySelectorAll('#billing-address .no-input-warning');
 
-	window.addEventListener('load', (e) => {
-		inputBoxes.forEach((inputBox) => {
-			requirePattern(null, inputBox);
-		});
-	});
-
-	inputBoxes.forEach((inputBox) => {
-		inputBox.addEventListener('blur', requirePattern.bind(null, event, inputBox));
-	});
-
-	function requirePattern(e, inputBox) {
-		const regexPattern = new RegExp(inputBox.pattern);
-
-		if (inputBox.value && !regexPattern.test(inputBox.value)) {
-			const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
-			let warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
-
-			if (label) warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
-
-			const warningElement = document.createElement('p');
-			const warningText = document.createTextNode(warningMessage);
-
-			warningElement.appendChild(warningText);
-			warningElement.classList.add('no-input-warning');
-			inputBox.parentElement.appendChild(warningElement, inputBox);
-			inputBox.style.borderColor = 'red';
-
-			inputBox.addEventListener('input', (e) => {
-				if (inputBox.value) {
-					warningElement.remove();
-					inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+				if (warningElements) {
+					Array.from(warningElements).forEach((warningElement) => {
+						warningElement.parentElement.querySelector('input').style.borderColor = 'rgba(var(--color-gray), 0.5)';
+						warningElement.remove();
+					});
 				}
-			});
-		}
-	}
-
-	function hasChosenSize() {
-		const productSizeContainer = document.querySelector('#product-size');
-		const selectedOption = productSizeContainer.options[productSizeContainer.selectedIndex];
-
-		if (selectedOption.hasAttribute('disabled')) {
-			return false;
-		}
-
-		return true;
-	}
-</script>
-{% endblock %} {% block script_two %}
-<script>
-	(function () {
-		getProductInfo();
-		function getProductInfo() {
-			const url = `http://127.0.0.1:8000/api/product/{{id}}/`;
-
-			fetch(url)
-				.then((response) => {
-					return response.json();
-				})
-				.then((response) => {
-					setProductInfo(response);
-				})
-				.catch((err) => {
-					console.log('error message: ', err);
-				});
-		}
-
-		function setProductInfo(response) {
-			const contents = JSON.parse(JSON.stringify(response));
-
-			const productPageContainer = document.querySelector('.product-page__product');
-			const productNames = productPageContainer.querySelectorAll('.product__name');
-			const productPrices = productPageContainer.querySelectorAll('.product__price');
-
-			const productImagesContainer = document.querySelector('.product__images-wrapper');
-			const productImageNavigator = productImagesContainer.querySelector('.product__images-navigator');
-			const productImages = productImagesContainer.querySelector('.product__images');
-			const productImageIndicator = productImagesContainer.querySelector('.product__images-indicator');
-
-			productNames.forEach((productName) => {
-				productName.textContent = contents.name;
-			});
-
-			productPrices.forEach((productPrice) => {
-				productPrice.textContent = 'P' + contents.price;
-			});
-
-			productImages.innerHTML = '';
-			for (let i = 0; i < contents.images.length; i++) {
-				const div = document.createElement('div');
-				div.classList.add('product__image-wrapper');
-				div.innerHTML = `<img src="${contents.images[i].image}" alt="" class="product__image" />`;
-				productImages.append(div);
-
-				const span = document.createElement('span');
-				span.classList.add('indicator');
-				if (i == 0) {
-					span.classList.add('indicator--active');
-				}
-				productImageIndicator.append(span);
 			}
 
-			if (!contents.total_stocks) {
-				productImageNavigator.remove();
-			} else {
-				utilities();
+			function addWarning(inputBox) {
+				const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
+				let warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
+
+				if (label) warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
+
+				const warningElement = document.createElement('p');
+				const warningText = document.createTextNode(warningMessage);
+
+				warningElement.appendChild(warningText);
+				warningElement.classList.add('no-input-warning');
+				inputBox.parentElement.appendChild(warningElement, inputBox);
+				inputBox.style.borderColor = 'red';
+
+				return warningElement;
 			}
 
-			const notifyOptionContainer = document.querySelector('.product__notify-option-wrapper');
-			const purchaseOptionContainer = document.querySelector('.product__purchase-option-wrapper');
-			const productSizeContainer = purchaseOptionContainer.querySelector('#product-size');
-			const noticeAddToBag = document.querySelector('.notice--add-to-bag');
+			function setAddresses() {
+				const checkbox = document.querySelector('#same-as-shipping-ad');
+				const shippingAddresses = document.querySelectorAll('#shipping-address input[id^="shipping-"');
+				const billingAddresses = document.querySelectorAll('#billing-address input[id^="billing-"');
+				const billingAddressesWrapper = document.querySelector('.billing-address-inputs-wrapper');
 
-			if (contents.total_stocks) {
-				if (Object.keys(contents.stocks).length > 1) {
-					const option = document.createElement('option');
-					option.innerText = 'CHOOSE A SIZE';
-					option.setAttribute('disabled', '');
-					option.setAttribute('selected', '');
-
-					for (const [key, value] of Object.entries(contents.stocks)) {
-						const option = document.createElement('option');
-						option.value = key;
-						option.name = 'size';
-						option.innerText = key + ` - Only ${value} remaining`;
-
-						if (!value) {
-							option.setAttribute('disabled', '');
+				window.addEventListener('load', (e) => {
+					if (checkbox.checked) {
+						for (let i = 0; i < shippingAddresses.length; i++) {
+							billingAddresses[i].value = shippingAddresses[i].value;
 						}
 
-						productSizeContainer.append(option);
+						const event = new Event('change');
+						checkbox.dispatchEvent(event);
+
+						billingAddressesWrapper.style.maxHeight = null;
+					} else {
+						billingAddressesWrapper.style.maxHeight = 'fit-content';
 					}
-				} else {
-					productSizeContainer.style.display = 'none';
-				}
-
-				const addToBagButton = document.querySelector('.product__add-to-bag-option .btn-submit');
-				addToBagButton.innerText = 'ADD TO BAG';
-
-				noticeAddToBag.innerHTML = `
-							<p>The color of the image and the actual product may differ.</p>
-							<p>Delays and out of stock may occur due to order congestion and supply circumstances.</p>
-							`;
-			} else {
-				notifyOptionContainer.style.display = 'block';
-				purchaseOptionContainer.style.display = 'none';
-				noticeAddToBag.style.display = 'none';
-			}
-
-			const productDescriptionContainers = Array.from(document.querySelectorAll('.product__description-wrapper'));
-
-			productDescriptionContainers.forEach((productDescriptionContainer) => {
-				productDescriptionContainer.innerHTML = '';
-				const div = document.createElement('div');
-				div.classList.add('product__description');
-				div.innerHTML = contents.description;
-
-				productDescriptionContainer.append(div);
-			});
-		}
-
-		function utilities() {
-			const productPage = document.querySelector('.product-page');
-			const prevButton = productPage.querySelector('.navigator--left');
-			const nextButton = productPage.querySelector('.navigator--right');
-			const imagesContainer = productPage.querySelector('.product__images');
-			const images = imagesContainer.children;
-			const imagesIndicators = Array.from(productPage.querySelector('.product__images-indicator').children);
-
-			let currentImageIndex = 0;
-
-			nextButton.addEventListener('click', (e) => {
-				moveImagesContainer(currentImageIndex + 1);
-			});
-
-			prevButton.addEventListener('click', (e) => {
-				moveImagesContainer(currentImageIndex - 1);
-			});
-
-			imagesIndicators.forEach((indicator) => {
-				indicator.addEventListener('click', (e) => {
-					moveImagesContainer(imagesIndicators.indexOf(e.target));
 				});
-			});
 
-			function moveImagesContainer(toImageIndex) {
-				imagesIndicators[currentImageIndex].classList.remove('indicator--active');
+				function copyShippingAddress(e) {
+					const billingInput = billingAddressesWrapper.querySelector(`#${e.target.id.replace('shipping', 'billing')}`);
 
-				if (toImageIndex > images.length - 1) {
-					currentImageIndex = 0;
-				} else if (toImageIndex < 0) {
-					currentImageIndex = images.length - 1;
-				} else {
-					currentImageIndex = toImageIndex;
+					billingInput.value = e.target.value;
 				}
 
-				imagesContainer.style.transform = 'translateX(' + currentImageIndex * -100 + '%)';
-				imagesIndicators[currentImageIndex].classList.add('indicator--active');
+				checkbox.addEventListener('change', (e) => {
+					if (checkbox.checked) {
+						billingAddressesWrapper.style.maxHeight = null;
+
+						removeWarningsInBilling();
+
+						Array.from(shippingAddresses).forEach((shippingAddress) => {
+							const billingInput = billingAddressesWrapper.querySelector(
+								`#${shippingAddress.id.replace('shipping', 'billing')}`
+							);
+							billingInput.value = shippingAddress.value;
+
+							shippingAddress.addEventListener('input', copyShippingAddress);
+						});
+					} else {
+						Array.from(shippingAddresses).forEach((shippingAddress) => {
+							Array.from(billingAddresses).forEach((billingAddress) => {
+								billingAddress.value = '';
+							});
+
+							shippingAddress.removeEventListener('input', copyShippingAddress);
+						});
+
+						billingAddressesWrapper.style.maxHeight = 'fit-content';
+					}
+				});
 			}
-		}
-	})();
-</script>
-<script></script>
-{% endblock %}
+
+			function validateFormOnSubmit(form) {
+				const inputBoxes = Array.from(document.querySelectorAll("input[required='']"));
+
+				form.addEventListener('submit', (e) => {
+					const warningElement = form.querySelector('.no-input-warning');
+					const checkbox = document.querySelector('#same-as-shipping-ad');
+
+					let flag = true;
+
+					inputBoxes.forEach((inputBox) => {
+						if (!inputBox.value) {
+							flag = false;
+							inputBox.focus();
+
+							if (checkbox == null) {
+								inputBox.blur();
+							}
+						}
+					});
+
+					if (checkbox != null && checkbox.checked) {
+						removeWarningsInBilling();
+					}
+
+					if (warningElement) {
+						flag = false;
+						warningElement.parentElement.querySelector('input').focus();
+						// warningElement.parentElement.querySelector('input').blur();
+					}
+
+					if (!flag) {
+						e.preventDefault();
+					}
+				});
+			}
+
+			function requirePatternOnLoadBlur(form) {
+				const inputBoxes = Array.from(form.querySelectorAll('input[pattern]'));
+
+				window.addEventListener('load', (e) => {
+					inputBoxes.forEach((inputBox) => {
+						requirePattern(null, inputBox);
+					});
+				});
+
+				inputBoxes.forEach((inputBox) => {
+					inputBox.addEventListener('blur', requirePattern.bind(null, event, inputBox));
+				});
+
+				function requirePattern(e, inputBox) {
+					const regexPattern = new RegExp(inputBox.pattern);
+
+					if (inputBox.value && !regexPattern.test(inputBox.value)) {
+						const warningElement = addWarning(inputBox);
+
+						inputBox.addEventListener('input', (e) => {
+							if (inputBox.value) {
+								warningElement.remove();
+								inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+							}
+						});
+					}
+				}
+			}
+
+			function requireInputOnBlur(form) {
+				const inputBoxes = Array.from(form.querySelectorAll(`input[required]`));
+				const inputSubmit = form.querySelector(`input[type='submit'][name='${form.name}']`);
+
+				inputBoxes.forEach((inputBox) => {
+					inputBox.addEventListener('blur', (e) => {
+						if (!inputBox.value) {
+							const inputBoxParent = inputBox.parentElement;
+
+							if (!inputBoxParent.contains(inputBoxParent.querySelector('.no-input-warning'))) {
+								const label = inputBoxParent.querySelector('label');
+								const warningElement = document.createElement('p');
+								const warningText = document.createTextNode(`Please enter ${label.innerText.toLowerCase()}.`);
+
+								warningElement.appendChild(warningText);
+								warningElement.classList.add('no-input-warning');
+								inputBoxParent.appendChild(warningElement, inputBox);
+								inputBox.style.borderColor = 'red';
+
+								inputBox.addEventListener('input', (e) => {
+									if (inputBox.value) {
+										warningElement.remove();
+										inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+									}
+								});
+							}
+						}
+					});
+				});
+			}
+
+			function addCharOnKeyUp(inputElement, char, spacePosBefore = [4, 8, 13]) {
+				inputElement.addEventListener('keyup', (e) => {
+					if ((e.key == ' ') & (e.key !== 'Backspace')) {
+						e.preventDefault();
+					}
+
+					if (spacePosBefore.includes(inputElement.value.length) && e.key !== 'Backspace') {
+						inputElement.value = inputElement.value + char;
+					}
+				});
+			}
+		})();
+	</script>
+	<script>
+		(function () {
+			const accordionHeader = document.querySelector('.accordion-header');
+			const accordionBody = document.querySelector('.accordion-body');
+
+			accordionHeader.addEventListener('click', (e) => {
+				if (accordionBody.style.maxHeight) {
+					accordionHeader.querySelector('.btn-icon').style.transform = 'rotate(0deg)';
+					accordionBody.style.maxHeight = null;
+				} else {
+					accordionHeader.querySelector('.btn-icon').style.transform = 'rotate(45deg)';
+					accordionBody.style.maxHeight = accordionBody.scrollHeight + 'px';
+				}
+			});
+		})();
+	</script>
+</html>

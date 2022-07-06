@@ -64,12 +64,14 @@ class Order(models.Model):
         ('F', 'FAILED')
     )
 
+   
+
     guest_name = models.CharField(max_length=100)
-    phone_no = models.CharField(max_length=13)
+    phone_no = models.CharField(max_length=14)
     email_ad = models.EmailField(max_length=255)
-    shipping_ad = models.CharField(max_length=255)
-    billing_ad = models.CharField(max_length=255)
-    date_of_purchase = models.DateField()
+    shipping_ad = models.CharField(max_length=500)
+    billing_ad = models.CharField(max_length=500)
+    date_of_purchase = models.DateTimeField(default=timezone.now)
     total = models.DecimalField(max_digits=6, decimal_places=2)
     status = models.CharField(max_length= 1, choices=STATUS, default='P')
 
@@ -77,9 +79,14 @@ class Order(models.Model):
         return self.guest_name
 
 
-class Item(models.Model):
+class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.PROTECT)
     item = models.ForeignKey(Inventory, on_delete=models.PROTECT)
-    quantity = models.PositiveIntegerField()
-    subtotal = models.DecimalField(max_digits=6, decimal_places=2)
-    
+
+
+class Notify(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    email = models.EmailField()
+
+    def __str__(self):
+        return '{0} - {1}'.format(self.product, self.email)
