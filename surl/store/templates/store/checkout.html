@@ -1,0 +1,737 @@
+{% load livereload_tags %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Checkout | SURL</title>
+		<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+		{% livereload_script %}
+	</head>
+	<body>
+		<header class="header--product-page header--checkout">
+			<a href="index.html" class="logo-surl"><img src="{% static 'icons/logo-surl.svg' %}" alt="surl logo" /></a>
+		</header>
+		<main class="checkout-page">
+			<section class="order-summary section">
+				<div class="order-summary__title section__title accordion-header">
+					<span class="title">ORDER SUMMARY</span>
+					<span class="btn-icon"><img src="{% static 'icons/plus.svg' %}" alt="" /></span>
+				</div>
+				<div class="order-summary__body accordion-body">
+					<ol class="order-summary__items">
+						<div class="loader-wrapper">
+							<div class="loader"></div>
+						</div>
+					</ol>
+				</div>
+				<div class="order-summary__footer">
+					<div class="footer__line">
+						<div class="skeleton skeleton--text"></div>
+					</div>
+					<div class="footer__line">
+						<div class="skeleton skeleton--text"></div>
+					</div>
+					<div class="footer__line">
+						<div class="skeleton skeleton--text"></div>
+					</div>
+				</div>
+			</section>
+			<section class="checkout-form-wrapper section">
+				<div class="section__title">
+					<span>CHECKOUT</span>
+				</div>
+				<form action="" class="checkout-form__form" name="checkout" novalidate>
+					<div id="shipping-address" class="form__subsection">
+						<div class="subsection__title"> SHIPPING ADDRESS </div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="first-name">First Name</label>
+								<input type="text" id="first-name" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="last-name">Last Name</label>
+								<input type="text" id="last-name" name="checkout" class="input-box" required />
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="phone-number">Phone Number</label>
+								<input
+									type="text"
+									id="phone-number"
+									name="checkout"
+									maxlength="17"
+									pattern="[+639][ ]\d{3}[ ]\d{4}[ ]\d{3}"
+									placeholder="+639 012 3456 789"
+									class="input-box"
+									required
+								/>
+							</div>
+							<div class="label-input-wrapper">
+								<label for="email-address">Email Address</label>
+								<input
+									type="email"
+									id="email-address"
+									name="checkout"
+									pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+									placeholder="email@example.com"
+									class="input-box"
+									required
+								/>
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="shipping-street-address">Street Address</label>
+								<input type="text" id="shipping-street-address" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="shipping-additional-address">Additional Address (Optional)</label>
+								<input type="text" id="shipping-additional-address" name="checkout" class="input-box" />
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="shipping-city-municipality">City or Municipality</label>
+								<input type="text" id="shipping-city-municipality" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="shipping-zip-code">Zip or Postal Code</label>
+								<input type="text" id="shipping-zip-code" name="checkout" class="input-box" required />
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="shipping-province">Province</label>
+								<input type="text" id="shipping-province" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="country">Country</label>
+								<input type="text" id="country" name="checkout" class="input-box" value="Philippines" disabled />
+							</div>
+						</div>
+					</div>
+					<div class="form__subsection">
+						<div class="subsection__title"> CARD DETAILS </div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="card-number">Card Number</label>
+								<input
+									type="text"
+									id="card-number"
+									name="checkout"
+									class="input-box"
+									placeholder="1234 1234 1234 1234"
+									pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}"
+									maxlength="19"
+									required
+								/>
+								<div class="logos-wrapper">
+									<img src="{% static 'icons/visa.svg' %}" alt="" />
+									<img src="{% static 'icons/mastercard.svg' %}" alt="" />
+								</div>
+							</div>
+							<div class="label-input-wrapper">
+								<label for="expiration-date">Expiration Date</label>
+								<input
+									type="text"
+									id="expiration-date"
+									name="checkout"
+									placeholder="MM / YY"
+									maxlength="7"
+									class="input-box"
+									required
+								/>
+							</div>
+						</div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper">
+								<label for="card-holder-name">Card Holder's name</label>
+								<input type="text" id="card-holder-name" name="checkout" class="input-box" required />
+							</div>
+							<div class="label-input-wrapper">
+								<label for="security-code">Security Code</label>
+								<input
+									type="text"
+									id="security-code"
+									name="checkout"
+									class="input-box"
+									pattern="[0-9]{3}"
+									placeholder="CVV"
+									required
+								/>
+							</div>
+						</div>
+					</div>
+					<div id="billing-address" class="form__subsection">
+						<div class="subsection__title"> BILLING ADDRESS </div>
+						<div class="subsection__inputs">
+							<div class="label-input-wrapper--checkbox">
+								<label for="same-as-shipping-ad">Same as shipping address</label>
+								<input type="checkbox" id="same-as-shipping-ad" name="checkout" required checked />
+							</div>
+						</div>
+						<div class="billing-address-inputs-wrapper">
+							<div class="subsection__inputs">
+								<div class="label-input-wrapper">
+									<label for="billing-street-address">Street Address</label>
+									<input type="text" id="billing-street-address" name="checkout" class="input-box" required />
+								</div>
+								<div class="label-input-wrapper">
+									<label for="billing-additional-address">Additional Address (Optional)</label>
+									<input type="text" id="billing-additional-address" name="checkout" class="input-box" />
+								</div>
+							</div>
+							<div class="subsection__inputs">
+								<div class="label-input-wrapper">
+									<label for="billing-city-municipality">City or Municipality</label>
+									<input type="text" id="billing-city-municipality" name="checkout" class="input-box" required />
+								</div>
+								<div class="label-input-wrapper">
+									<label for="billing-zip-code">Zip or Postal Code</label>
+									<input type="text" id="billing-zip-code" name="checkout" class="input-box" required />
+								</div>
+							</div>
+							<div class="subsection__inputs">
+								<div class="label-input-wrapper">
+									<label for="billing-province">Province</label>
+									<input type="text" id="billing-province" name="checkout" class="input-box" required />
+								</div>
+								<div class="label-input-wrapper">
+									<label for="country">Country</label>
+									<input type="text" id="country" name="checkout" class="input-box" value="Philippines" disabled />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form__subsection">
+						<div class="subsection__inputs">
+							<input type="submit" id="card-number" value="PLACE ORDER" name="checkout" class="btn-submit" required />
+						</div>
+					</div>
+				</form>
+			</section>
+		</main>
+	</body>
+	<script>
+		function setForm(inventory) {
+			const form = document.querySelector('form[name="checkout"]');
+
+			addCharOnKeyUp(document.querySelector('#phone-number'), ' ');
+			addCharOnKeyUp(document.querySelector('#card-number'), ' ', [4, 9, 14]);
+			addCharOnKeyUp(document.querySelector('#expiration-date'), ' / ', [2]);
+
+			setExpirationDatePattern();
+			setPhoneNumberInitial();
+
+			requirePatternOnLoadBlur(form);
+			requireInputOnBlur(form);
+			validateFormOnSubmit(form);
+
+			setAddresses();
+
+			function setPhoneNumberInitial() {
+				const phoneNum = document.querySelector('#phone-number');
+
+				phoneNum.addEventListener('click', (e) => {
+					if (!e.target.value) e.target.value = '+639 ';
+				});
+			}
+
+			function setExpirationDatePattern() {
+				const expDate = document.querySelector('#expiration-date');
+				const dt = new Date();
+				const currentMonth = parseInt(dt.getMonth() + 1)
+					.toString()
+					.padStart(2, '0');
+				const currentYear = parseInt(dt.getFullYear().toString().substr(-2));
+
+				expDate.pattern = `(0[1-9]|1[0-2]) \/ ([0-9]{2})`;
+
+				expDate.addEventListener('input', (e) => {
+					if (e.target.value.length == 1 && parseInt(e.target.value) > 1) {
+						e.target.value = 0 + e.target.value + ' / ';
+					}
+				});
+
+				window.addEventListener('load', (e) => {
+					if (expDate.value) {
+						const event = new Event('blur');
+						expDate.dispatchEvent(event);
+					}
+				});
+
+				expDate.addEventListener('blur', (e) => {
+					const enteredMonths = parseInt(e.target.value.slice(0, 2));
+					const enteredYear = parseInt(e.target.value.slice(5));
+
+					if (
+						(e.target.value.length == 7 && (enteredYear > currentYear + 4 || enteredYear < currentYear)) ||
+						(enteredMonths <= parseInt(currentMonth) && enteredYear == 22)
+					) {
+						addWarning(e.target);
+					} else {
+						const warningElements = expDate.parentElement.querySelectorAll('.no-input-warning');
+
+						if (warningElements) {
+							warningElements.forEach((warningElement) => {
+								warningElement.remove();
+							});
+							expDate.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+						}
+					}
+				});
+			}
+
+			function removeWarningsInBilling() {
+				const warningElements = form.querySelectorAll('#billing-address .no-input-warning');
+
+				if (warningElements) {
+					Array.from(warningElements).forEach((warningElement) => {
+						warningElement.parentElement.querySelector('input').style.borderColor = 'rgba(var(--color-gray), 0.5)';
+						warningElement.remove();
+					});
+				}
+			}
+
+			function addWarning(inputBox) {
+				const label = inputBox.parentElement.querySelector(`label[for='${inputBox.id}']`);
+				let warningMessage = `Invalid ${inputBox.placeholder.toLowerCase()}`;
+
+				if (label) warningMessage = `Invalid ${label.innerText.toLowerCase()}`;
+
+				const warningElement = document.createElement('p');
+				const warningText = document.createTextNode(warningMessage);
+
+				warningElement.appendChild(warningText);
+				warningElement.classList.add('no-input-warning');
+				inputBox.parentElement.appendChild(warningElement, inputBox);
+				inputBox.style.borderColor = 'red';
+
+				return warningElement;
+			}
+
+			function setAddresses() {
+				const checkbox = document.querySelector('#same-as-shipping-ad');
+				const shippingAddresses = document.querySelectorAll('#shipping-address input[id^="shipping-"]');
+				const billingAddresses = document.querySelectorAll('#billing-address input[id^="billing-"]');
+				const billingAddressesWrapper = document.querySelector('.billing-address-inputs-wrapper');
+
+				const email = document.querySelector('#email-address');
+				email.value = sessionStorage.surlUserEmail;
+				email.setAttribute('disabled', '');
+
+				window.addEventListener('load', (e) => {
+					if (checkbox.checked) {
+						for (let i = 0; i < shippingAddresses.length; i++) {
+							billingAddresses[i].value = shippingAddresses[i].value;
+						}
+
+						const event = new Event('change');
+						checkbox.dispatchEvent(event);
+
+						billingAddressesWrapper.style.maxHeight = 'null';
+					} else {
+						billingAddressesWrapper.style.maxHeight = 'fit-content';
+					}
+				});
+
+				checkbox.addEventListener('change', (e) => {
+					if (checkbox.checked) {
+						billingAddressesWrapper.style.maxHeight = null;
+
+						removeWarningsInBilling();
+
+						Array.from(shippingAddresses).forEach((shippingAddress) => {
+							const billingInput = billingAddressesWrapper.querySelector(
+								`#${shippingAddress.id.replace('shipping', 'billing')}`
+							);
+							billingInput.value = shippingAddress.value;
+
+							shippingAddress.addEventListener('input', copyShippingAddress);
+						});
+					} else {
+						Array.from(shippingAddresses).forEach((shippingAddress) => {
+							Array.from(billingAddresses).forEach((billingAddress) => {
+								billingAddress.value = '';
+							});
+
+							shippingAddress.removeEventListener('input', copyShippingAddress);
+						});
+
+						billingAddressesWrapper.style.maxHeight = 'fit-content';
+					}
+				});
+			}
+
+			function copyShippingAddress(e) {
+				const billingAddressesWrapper = document.querySelector('.billing-address-inputs-wrapper');
+				const billingInput = billingAddressesWrapper.querySelector(`#${e.target.id.replace('shipping', 'billing')}`);
+
+				billingInput.value = e.target.value;
+			}
+
+			function validateFormOnSubmit(form) {
+				const inputBoxes = Array.from(document.querySelectorAll("input[required='']"));
+
+				form.addEventListener('submit', (e) => {
+					e.preventDefault();
+					const warningElement = form.querySelector('.no-input-warning');
+					const checkbox = document.querySelector('#same-as-shipping-ad');
+
+					let flag = true;
+
+					inputBoxes.forEach((inputBox) => {
+						if (!inputBox.value) {
+							flag = false;
+
+							inputBox.focus();
+
+							if (checkbox.checked) {
+								inputBox.blur();
+							}
+						}
+					});
+
+					if (checkbox != null && checkbox.checked) {
+						removeWarningsInBilling();
+						flag = true;
+					}
+
+					if (warningElement != null) {
+						flag = false;
+						warningElement.parentElement.querySelector('input').focus();
+						// warningElement.parentElement.querySelector('input').blur();
+					}
+
+					if (flag) {
+						console.log('hree');
+						const formattedInventory = getFormattedInventory(inventory);
+
+						const csrftoken = getCookie('csrftoken');
+						const url = `http://127.0.0.1:8000/api/purchase/`;
+
+						fetch(url, {
+							method: 'POST',
+							headers: {
+								'Content-type': 'application/json',
+								'X-CSRFToken': csrftoken,
+							},
+							body: JSON.stringify(getFormValue()),
+						})
+							.then((response) => {
+								return response.json();
+							})
+							.then((response) => {
+								for (const [key, value] of Object.entries(localBag)) {
+									if (value.isIncluded) {
+										const url = `http://127.0.0.1:8000/api/add-purchase-item/`;
+										fetch(url, {
+											method: 'POST',
+											headers: {
+												'Content-type': 'application/json',
+												'X-CSRFToken': csrftoken,
+											},
+											body: JSON.stringify({
+												order: response.id,
+												item: formattedInventory[String([value.product_id, value.selectedSize])].id,
+											}),
+										})
+											.then((response) => {
+												delete localBag[key];
+												localStorage.setItem('surlShoppingBag', JSON.stringify(localBag));
+											})
+											.catch((err) => {
+												console.log('err', err);
+											});
+									}
+								}
+
+								window.location.replace(`http://127.0.0.1:8000/store/thankyou/${response.id}`);
+							})
+							.catch((err) => {
+								alert('Oh no! Something went wrong. Please refresh the page and try again.');
+							});
+					}
+				});
+			}
+
+			function getFormValue() {
+				const form = document.querySelector('.checkout-form__form');
+				const fName = form.querySelector('#first-name').value;
+				const lName = form.querySelector('#last-name').value;
+				const phoneNumber = form.querySelector('#phone-number').value.replace(/\s/g, '');
+				const emailAddress = form.querySelector('#email-address').value;
+
+				const shippingSreetAddress = form.querySelector('#shipping-street-address').value;
+				const shippingAdditionalAddress = form.querySelector('#shipping-additional-address').value;
+				const shippingCityMunicipality = form.querySelector('#shipping-city-municipality').value;
+				const shippingProvince = form.querySelector('#shipping-province').value;
+				const shippingCountry = 'Philippines';
+				const shippingZipCode = form.querySelector('#shipping-zip-code').value;
+
+				const shippingAddress = `${shippingSreetAddress}, ${shippingAdditionalAddress}, ${shippingCityMunicipality}, ${shippingProvince}, ${shippingCountry}, ${shippingZipCode}`;
+
+				const billingSreetAddress = form.querySelector('#billing-street-address').value;
+				const billingAdditionalAddress = form.querySelector('#billing-additional-address').value;
+				const billingCityMunicipality = form.querySelector('#billing-city-municipality').value;
+				const billingProvince = form.querySelector('#billing-province').value;
+				const billingCountry = 'Philippines';
+				const billingZipCode = form.querySelector('#billing-zip-code').value;
+
+				const billingAddress = `${billingSreetAddress}, ${billingAdditionalAddress}, ${billingCityMunicipality}, ${billingProvince}, ${billingCountry}, ${billingZipCode}`;
+
+				return {
+					guest_name: fName + lName,
+					phone_no: phoneNumber,
+					email_ad: emailAddress,
+					shipping_ad: shippingAddress,
+					billing_ad: billingAddress,
+					total: 0,
+				};
+			}
+
+			function getFormattedInventory(inventory) {
+				let formattedInventory = {};
+				for (const [key, value] of Object.entries(inventory)) {
+					formattedInventory[String([value.product_id, value.size])] = {
+						id: value.id,
+						product_name: value.product,
+						price: value.price,
+						size: value.size,
+						stocks: value.stocks,
+						thumbnail: value.images.image,
+					};
+				}
+
+				return formattedInventory;
+			}
+
+			function getCookie(name) {
+				let cookieValue = null;
+				if (document.cookie && document.cookie !== '') {
+					const cookies = document.cookie.split(';');
+					for (let i = 0; i < cookies.length; i++) {
+						const cookie = cookies[i].trim();
+						// Does this cookie string begin with the name we want?
+						if (cookie.substring(0, name.length + 1) === name + '=') {
+							cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+							break;
+						}
+					}
+				}
+				return cookieValue;
+			}
+
+			function requirePatternOnLoadBlur(form) {
+				const inputBoxes = Array.from(form.querySelectorAll('input[pattern]'));
+
+				window.addEventListener('load', (e) => {
+					inputBoxes.forEach((inputBox) => {
+						requirePattern(null, inputBox);
+					});
+				});
+
+				inputBoxes.forEach((inputBox) => {
+					inputBox.addEventListener('blur', requirePattern.bind(null, event, inputBox));
+				});
+
+				function requirePattern(e, inputBox) {
+					const regexPattern = new RegExp(inputBox.pattern);
+
+					if (inputBox.value && !regexPattern.test(inputBox.value)) {
+						const warningElement = addWarning(inputBox);
+
+						inputBox.addEventListener('input', (e) => {
+							if (inputBox.value) {
+								warningElement.remove();
+								inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+							}
+						});
+					}
+				}
+			}
+
+			function requireInputOnBlur(form) {
+				const inputBoxes = Array.from(form.querySelectorAll(`input[required]`));
+				const inputSubmit = form.querySelector(`input[type='submit'][name='${form.name}']`);
+
+				inputBoxes.forEach((inputBox) => {
+					inputBox.addEventListener('blur', (e) => {
+						if (!inputBox.value) {
+							const inputBoxParent = inputBox.parentElement;
+
+							if (!inputBoxParent.contains(inputBoxParent.querySelector('.no-input-warning'))) {
+								const label = inputBoxParent.querySelector('label');
+								const warningElement = document.createElement('p');
+								const warningText = document.createTextNode(`Please enter ${label.innerText.toLowerCase()}.`);
+
+								warningElement.appendChild(warningText);
+								warningElement.classList.add('no-input-warning');
+								inputBoxParent.appendChild(warningElement, inputBox);
+								inputBox.style.borderColor = 'red';
+
+								inputBox.addEventListener('input', (e) => {
+									if (inputBox.value) {
+										warningElement.remove();
+										inputBox.style.borderColor = 'rgba(var(--color-gray), 0.5)';
+									}
+								});
+							}
+						}
+					});
+				});
+			}
+
+			function addCharOnKeyUp(inputElement, char, spacePosBefore = [4, 8, 13]) {
+				inputElement.addEventListener('keyup', (e) => {
+					if ((e.key == ' ') & (e.key !== 'Backspace')) {
+						e.preventDefault();
+					}
+
+					if (spacePosBefore.includes(inputElement.value.length) && e.key !== 'Backspace') {
+						inputElement.value = inputElement.value + char;
+					}
+				});
+			}
+		}
+	</script>
+	<script>
+		(function () {
+			const accordionHeader = document.querySelector('.accordion-header');
+			const accordionBody = document.querySelector('.accordion-body');
+
+			accordionHeader.addEventListener('click', (e) => {
+				if (accordionBody.style.maxHeight) {
+					accordionHeader.querySelector('.btn-icon').style.transform = 'rotate(0deg)';
+					accordionBody.style.maxHeight = null;
+				} else {
+					accordionHeader.querySelector('.btn-icon').style.transform = 'rotate(45deg)';
+					accordionBody.style.maxHeight = accordionBody.scrollHeight + 'px';
+				}
+			});
+		})();
+	</script>
+	<script>
+		(function () {
+			if (sessionStorage.surlToken == 'false' || sessionStorage.surlToken == undefined) {
+				window.location.replace('http://127.0.0.1:8000/store/bag/');
+			}
+
+			// sessionStorage.surlToken = false;
+			setOrderSummary();
+
+			function setOrderSummary() {
+				const url = 'http://127.0.0.1:8000/api/inventory/';
+
+				fetch(url)
+					.then((inventory) => {
+						return inventory.json();
+					})
+					.then((inventory) => {
+						setForm(inventory);
+
+						const checkoutPage = document.querySelector('.checkout-page');
+						checkoutPage.style.pointerEvents = 'unset';
+
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+						const formattedInventory = getFormattedInventory(inventory);
+						const totalIncludedItems = getTotalIncludedItems();
+
+						const orderSummaryContainer = document.querySelector('.order-summary');
+						const orderSummaryTitle = orderSummaryContainer.querySelector('.title');
+						const orderSummaryItems = orderSummaryContainer.querySelector('.order-summary__items');
+						const orderSummaryFooter = orderSummaryContainer.querySelector('.order-summary__footer');
+						orderSummaryTitle.innerHTML = `ORDER SUMMARY - ${totalIncludedItems} ITEMS`;
+						orderSummaryItems.innerHTML = '';
+						orderSummaryFooter.innerHTML = '';
+
+						for (const [key, value] of Object.entries(localBag)) {
+							if (!value.isIncluded) {
+								continue;
+							}
+
+							const k = String([value.product_id, value.selectedSize]);
+							const list = document.createElement('li');
+							list.classList.add('order-summary__item');
+
+							list.innerHTML = `
+								<div class="item__image-wrapper-outer">
+									<div class="item__image-wrapper-inner">
+										<img src="${formattedInventory[k].thumbnail}" alt="" class="item__image">
+									</div>
+								</div>
+								<div class="item__texts-price-options-wrapper">
+									<div class="item__texts-price-wrapper">
+										<div class="item__texts">
+											<div class="item__name"> ${formattedInventory[k].product_name} </div>
+											<div class="item__size-option">Size: ${formattedInventory[k].size} </div>
+										</div>
+										<div class="item__price">P${formatNumber(formattedInventory[k].price)}.00</div>
+									</div>
+								</div>
+							`;
+
+							orderSummaryItems.append(list);
+						}
+
+						let totalPrice = 0;
+						for (const [key, value] of Object.entries(localBag)) {
+							if (value.isIncluded) {
+								totalPrice = totalPrice + formattedInventory[String([value.product_id, value.selectedSize])].price;
+							}
+						}
+						totalPrice = formatNumber(totalPrice);
+						orderSummaryFooter.innerHTML = `
+						<div class="footer__line">
+							<span>Total</span>
+							<span>P${totalPrice}.00</span>
+						</div>
+						<div class="footer__line">
+							<span>Shipping estimate</span>
+							<span>FREE</span>
+						</div>
+						<div class="footer__line">
+							<span><strong>Order Total</strong></span>
+							<span><strong>P${totalPrice}.00</strong></span>
+						</div>
+						`;
+					});
+			}
+
+			function formatNumber(x) {
+				return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			}
+
+			function getTotalIncludedItems() {
+				const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
+
+				let totalIncludedItems = 0;
+				for (const [key, value] of Object.entries(localBag)) {
+					if (value.isIncluded) {
+						totalIncludedItems = totalIncludedItems + 1;
+					}
+				}
+				return totalIncludedItems;
+			}
+
+			function getFormattedInventory(inventory) {
+				let formattedInventory = {};
+				for (const [key, value] of Object.entries(inventory)) {
+					formattedInventory[String([value.product_id, value.size])] = {
+						id: value.id,
+						product_name: value.product,
+						price: value.price,
+						size: value.size,
+						stocks: value.stocks,
+						thumbnail: value.images.image,
+					};
+				}
+
+				return formattedInventory;
+			}
+		})();
+	</script>
+</html>
