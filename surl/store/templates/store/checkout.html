@@ -407,9 +407,8 @@
 					}
 
 					if (flag) {
-						console.log('hree');
 						const formattedInventory = getFormattedInventory(inventory);
-
+						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
 						const csrftoken = getCookie('csrftoken');
 						const url = `http://127.0.0.1:8000/api/purchase/`;
 
@@ -423,12 +422,14 @@
 						})
 							.then((response) => {
 								return response.json();
+								console.log('hree');
 							})
 							.then((response) => {
+								const requests = [];
+								const url = `http://127.0.0.1:8000/api/add-purchase-item/`;
 								for (const [key, value] of Object.entries(localBag)) {
 									if (value.isIncluded) {
-										const url = `http://127.0.0.1:8000/api/add-purchase-item/`;
-										fetch(url, {
+										let request = new Request(url, {
 											method: 'POST',
 											headers: {
 												'Content-type': 'application/json',
@@ -438,20 +439,34 @@
 												order: response.id,
 												item: formattedInventory[String([value.product_id, value.selectedSize])].id,
 											}),
-										})
-											.then((response) => {
-												delete localBag[key];
-												localStorage.setItem('surlShoppingBag', JSON.stringify(localBag));
-											})
-											.catch((err) => {
-												console.log('err', err);
-											});
+										});
+
+										requests.push(request);
+
+										delete localBag[key];
+										localStorage.setItem('surlShoppingBag', JSON.stringify(localBag));
 									}
 								}
 
-								window.location.replace(`http://127.0.0.1:8000/store/thankyou/${response.id}`);
+								/* prettier-ignore */
+								Promise.all(requests.map((request) => fetch(request)))
+										.then((responses) => {
+											responses.forEach((response) => {
+                								if (response.status !== 201) throw new Error(response.status);
+            								});
+											
+            								return Promise.all(responses.map((response) => response.json()));
+										})
+										.then((responses) => {
+											window.location.replace(`http://127.0.0.1:8000/store/thankyou/${response.id}`);
+										})
+										.catch((err) => {
+											console.log('error', err);
+										})
+								;
 							})
 							.catch((err) => {
+								console.log(err);
 								alert('Oh no! Something went wrong. Please refresh the page and try again.');
 							});
 					}
