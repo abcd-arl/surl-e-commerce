@@ -14,9 +14,9 @@ Please note that the website does not have a sign in / sign up feature, and user
 <img width="1680" alt="Screen Shot 2022-07-10 at 12 54 49 AM" src="https://user-images.githubusercontent.com/106197019/178115741-6d175eed-b771-4f22-97d3-6dca816be7b5.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 12 54 58 AM" src="https://user-images.githubusercontent.com/106197019/178115742-2a43a4c6-56f5-4776-a87b-0360bd88c5ba.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 12 55 31 AM" src="https://user-images.githubusercontent.com/106197019/178115743-4c41e08a-9cba-4ab8-acb9-cc5324a11776.png">
-<img width="1680" alt="Screen Shot 2022-07-10 at 12 55 37 AM" src="https://user-images.githubusercontent.com/106197019/178115744-5a3bf1aa-43cb-42e7-b0b9-fd3117e3e527.png">
+<img width="1680" alt="Screen Shot 2022-07-10 at 1 20 14 AM" src="https://user-images.githubusercontent.com/106197019/178116258-7174bb51-6627-4bd5-9fe7-97f6fd323906.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 12 55 48 AM" src="https://user-images.githubusercontent.com/106197019/178115746-c7c908fd-e6ab-4f07-8c52-bed237dcb3c5.png">
-<img width="1680" alt="Screen Shot 2022-07-10 at 12 55 52 AM" src="https://user-images.githubusercontent.com/106197019/178115751-ec2cea71-73f8-4815-be7f-f0724908a02a.png">
+<img width="1680" alt="Screen Shot 2022-07-10 at 1 20 35 AM" src="https://user-images.githubusercontent.com/106197019/178116277-c3d5cdc3-d83b-4771-833a-0881c8474ba8.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 1 01 31 AM" src="https://user-images.githubusercontent.com/106197019/178115753-1ae6c449-8be5-4f88-9d87-ecadbd38dffe.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 1 01 44 AM" src="https://user-images.githubusercontent.com/106197019/178115761-5a9a0163-72c8-4db4-824d-8ffa8d40a460.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 1 02 47 AM" src="https://user-images.githubusercontent.com/106197019/178115763-d9aa91d9-7fa6-40f0-b6c6-3effd5c7a173.png">
