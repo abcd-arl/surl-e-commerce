@@ -6,6 +6,8 @@ The store works differently compared to those typical and popular e-commerce pla
 
 Please note that the website does not have a sign in / sign up feature, and users can only purchase as guest.
 
+I would also like to apologize for not deploying the program in a free cloud platform. You may use this [link](https://youtu.be/TbyFltnNNtI) to watch the demo I made on Youtube. I suggest to set the video in 2x speed. Thank you
+
 <img width="1680" alt="Screen Shot 2022-07-10 at 12 53 50 AM" src="https://user-images.githubusercontent.com/106197019/178115732-04aec937-72f5-4d0e-8b85-24b44e1d8d50.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 12 53 56 AM" src="https://user-images.githubusercontent.com/106197019/178115734-836f81e6-ff83-4abb-b178-3d1fbcc7e786.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 12 54 14 AM" src="https://user-images.githubusercontent.com/106197019/178115735-ff6f4087-196f-4872-a402-d9716bb7895e.png">
