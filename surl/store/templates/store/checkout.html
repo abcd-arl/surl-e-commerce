@@ -403,10 +403,10 @@
 
 					if (checkbox != null && checkbox.checked) {
 						removeWarningsInBilling();
-						flag = true;
 					}
 
 					if (warningElement != null) {
+						console.log('here');
 						flag = false;
 						warningElement.parentElement.querySelector('input').focus();
 						// warningElement.parentElement.querySelector('input').blur();
