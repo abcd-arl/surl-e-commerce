@@ -93,7 +93,6 @@
 					updateLocalBagItemsAvailability(formattedInventory);
 					addItemsFromLocalBagToHeaderBag(formattedInventory);
 					setShoppingBag(formattedInventory);
-					setForm();
 
 					function updateLocalBagItemsAvailability(formattedInventory) {
 						const localBag = JSON.parse(localStorage.getItem('surlShoppingBag'));
@@ -213,6 +212,7 @@
 									<input type="submit" name="to-checkout" value="PROCEED TO CHECKOUT" class="btn-submit" />
 								</form>
 							`;
+								setForm();
 							} else {
 								checkoutSection.innerHTML = `You have no included items.`;
 							}

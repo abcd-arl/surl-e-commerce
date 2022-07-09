@@ -170,7 +170,7 @@
 						<div class="subsection__inputs">
 							<div class="label-input-wrapper--checkbox">
 								<label for="same-as-shipping-ad">Same as shipping address</label>
-								<input type="checkbox" id="same-as-shipping-ad" name="checkout" required checked />
+								<input type="checkbox" id="same-as-shipping-ad" name="checkout" checked />
 							</div>
 						</div>
 						<div class="billing-address-inputs-wrapper">
@@ -323,25 +323,31 @@
 				email.value = sessionStorage.surlUserEmail;
 				email.setAttribute('disabled', '');
 
-				window.addEventListener('load', (e) => {
-					if (checkbox.checked) {
-						for (let i = 0; i < shippingAddresses.length; i++) {
-							billingAddresses[i].value = shippingAddresses[i].value;
-						}
-
-						const event = new Event('change');
-						checkbox.dispatchEvent(event);
-
-						billingAddressesWrapper.style.maxHeight = 'null';
-					} else {
-						billingAddressesWrapper.style.maxHeight = 'fit-content';
+				if (checkbox.checked) {
+					for (let i = 0; i < shippingAddresses.length; i++) {
+						billingAddresses[i].value = shippingAddresses[i].value;
 					}
-				});
+
+					billingAddressesWrapper.style.maxHeight = 0;
+					billingAddressesWrapper.style.overflow = 'hidden';
+					removeWarningsInBilling();
+
+					Array.from(shippingAddresses).forEach((shippingAddress) => {
+						const billingInput = billingAddressesWrapper.querySelector(
+							`#${shippingAddress.id.replace('shipping', 'billing')}`
+						);
+						billingInput.value = shippingAddress.value;
+
+						shippingAddress.addEventListener('input', copyShippingAddress);
+					});
+				} else {
+					billingAddressesWrapper.style.maxHeight = 'fit-content';
+				}
 
 				checkbox.addEventListener('change', (e) => {
 					if (checkbox.checked) {
-						billingAddressesWrapper.style.maxHeight = null;
-
+						billingAddressesWrapper.style.maxHeight = 0;
+						billingAddressesWrapper.style.overflow = 'hidden';
 						removeWarningsInBilling();
 
 						Array.from(shippingAddresses).forEach((shippingAddress) => {
@@ -499,7 +505,7 @@
 				const billingAddress = `${billingSreetAddress}, ${billingAdditionalAddress}, ${billingCityMunicipality}, ${billingProvince}, ${billingCountry}, ${billingZipCode}`;
 
 				return {
-					guest_name: fName + lName,
+					guest_name: fName + ' ' + lName,
 					phone_no: phoneNumber,
 					email_ad: emailAddress,
 					shipping_ad: shippingAddress,
