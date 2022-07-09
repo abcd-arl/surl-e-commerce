@@ -1,6 +1,6 @@
 # SURL Personal Website
 
-This project is my attempt in creating an e-commerce website for my favourite Korean band SURL. Like my other project, the front-end is made entirely from scratch without using any third-party libraries, while the back-end is built with Django and Django REST framework. Other than creating a functioning e-commerce website, I also focused on coming up and searching for a better and fresh design in all pages while also being web responsive. On top of that, the whole store is implemented with a skeleton loading and form validation.
+This project is my attempt in creating an e-commerce website for my favourite Korean band SURL. The front-end is made entirely from scratch without using any third-party libraries, while the back-end is built with Django and Django REST framework. Other than creating a functioning e-commerce website, I also focused on coming up and searching for a better and fresh design in all pages while also being web responsive. On top of that, the whole store is implemented with a skeleton loading and form validation.
 
 The store works differently compared to those typical and popular e-commerce platforms. Each item can only be bought only three (3) times per order and is treated individually rather than being quantified. It also gets rid of the wishing list feature, and users can store all their items in a bag (or cart) in which they can include or not include upon checkout, and later come back with their not included items. 
 
@@ -25,14 +25,3 @@ I would also like to apologize for not deploying the program in a free cloud pla
 <img width="1680" alt="Screen Shot 2022-07-10 at 1 08 31 AM" src="https://user-images.githubusercontent.com/106197019/178115909-45754c7c-53c1-4371-bd4d-515e9ef8c000.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 1 08 47 AM" src="https://user-images.githubusercontent.com/106197019/178115911-181f167f-0670-467d-a4ad-a6cc89531de5.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 1 08 57 AM" src="https://user-images.githubusercontent.com/106197019/178115912-ed9474ff-0442-43c6-90cb-6592fa5984ea.png">
-
-
-
-
-
-
-
-
-
-
-
