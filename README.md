@@ -1,10 +1,10 @@
 # SURL Personal Website
 
-This project is my attempt in creating an e-commerce website for my favourite Korean band SURL. The front-end is made entirely from scratch without using any third-party libraries, while the back-end is built with Django and Django REST framework. Other than creating a functioning e-commerce website, I also focused on coming up and searching for a better and fresh design in all pages while also being web responsive. On top of that, the whole store is implemented with a skeleton loading and form validation.
+This project is my attempt in creating an e-commerce website for my favourite Korean band SURL. The front-end is made entirely from scratch without using any third-party libraries, while the back-end is built with Django and Django REST framework. Other than creating a functioning e-commerce website, I also focused and worked really hard on coming up and searching for a better and fresh design in all pages while also being web responsive. On top of that, the whole store is implemented with a skeleton loading and form validation.
 
 The store works differently compared to those typical and popular e-commerce platforms. Each item can only be bought three (3) times per order and is treated individually rather than being quantified. It also gets rid of the wishing list feature, and users can store all their items in a bag (or cart) in which they can include or not include upon checkout, and later come back with their not included items. 
 
-Please note that the website does not have a sign in / sign up feature, and users can only purchase as guest. Also, all information are taken and translated from the [official website](https://mpmgmusic.com/).
+Please note that the website does not have a sign in / sign up feature, and users can only purchase as guest. Other pages are not working due to lack of design. Also, all information are taken and translated from the [official website](https://mpmgmusic.com/).
 
 You may use this [link](https://youtu.be/TbyFltnNNtI) to watch the demo I made on Youtube. I suggest to set the video in 2x speed.
 
