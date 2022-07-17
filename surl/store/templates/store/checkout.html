@@ -62,9 +62,9 @@
 									type="text"
 									id="phone-number"
 									name="checkout"
-									maxlength="17"
-									pattern="[+639][ ]\d{3}[ ]\d{4}[ ]\d{3}"
-									placeholder="+639 012 3456 789"
+									maxlength="16"
+									pattern="\(\+63\) 9\d{9}"
+									placeholder="(+63) 9123456789"
 									class="input-box"
 									required
 								/>
@@ -220,7 +220,6 @@
 		function setForm(inventory) {
 			const form = document.querySelector('form[name="checkout"]');
 
-			addCharOnKeyUp(document.querySelector('#phone-number'), ' ');
 			addCharOnKeyUp(document.querySelector('#card-number'), ' ', [4, 9, 14]);
 			addCharOnKeyUp(document.querySelector('#expiration-date'), ' / ', [2]);
 
@@ -237,7 +236,7 @@
 				const phoneNum = document.querySelector('#phone-number');
 
 				phoneNum.addEventListener('click', (e) => {
-					if (!e.target.value) e.target.value = '+639 ';
+					if (!e.target.value) e.target.value = '(+63) 9';
 				});
 			}
 
@@ -607,7 +606,7 @@
 				});
 			}
 
-			function addCharOnKeyUp(inputElement, char, spacePosBefore = [4, 8, 13]) {
+			function addCharOnKeyUp(inputElement, char, spacePosBefore) {
 				inputElement.addEventListener('keyup', (e) => {
 					if ((e.key == ' ') & (e.key !== 'Backspace')) {
 						e.preventDefault();
