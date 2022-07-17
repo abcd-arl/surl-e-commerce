@@ -19,9 +19,10 @@ You may use this [link](https://youtu.be/TbyFltnNNtI) to watch the demo I made o
 <img width="1680" alt="Screen Shot 2022-07-10 at 1 20 14 AM" src="https://user-images.githubusercontent.com/106197019/178116258-7174bb51-6627-4bd5-9fe7-97f6fd323906.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 12 55 48 AM" src="https://user-images.githubusercontent.com/106197019/178115746-c7c908fd-e6ab-4f07-8c52-bed237dcb3c5.png">
 <img width="1680" alt="Screen Shot 2022-07-10 at 1 20 35 AM" src="https://user-images.githubusercontent.com/106197019/178116277-c3d5cdc3-d83b-4771-833a-0881c8474ba8.png">
-<img width="1680" alt="Screen Shot 2022-07-10 at 1 01 31 AM" src="https://user-images.githubusercontent.com/106197019/178115753-1ae6c449-8be5-4f88-9d87-ecadbd38dffe.png">
-<img width="1680" alt="Screen Shot 2022-07-10 at 1 01 44 AM" src="https://user-images.githubusercontent.com/106197019/178115761-5a9a0163-72c8-4db4-824d-8ffa8d40a460.png">
-<img width="1680" alt="Screen Shot 2022-07-10 at 1 02 47 AM" src="https://user-images.githubusercontent.com/106197019/178115763-d9aa91d9-7fa6-40f0-b6c6-3effd5c7a173.png">
-<img width="1680" alt="Screen Shot 2022-07-10 at 1 08 31 AM" src="https://user-images.githubusercontent.com/106197019/178115909-45754c7c-53c1-4371-bd4d-515e9ef8c000.png">
-<img width="1680" alt="Screen Shot 2022-07-10 at 1 08 47 AM" src="https://user-images.githubusercontent.com/106197019/178115911-181f167f-0670-467d-a4ad-a6cc89531de5.png">
-<img width="1680" alt="Screen Shot 2022-07-10 at 1 08 57 AM" src="https://user-images.githubusercontent.com/106197019/178115912-ed9474ff-0442-43c6-90cb-6592fa5984ea.png">
+<img width="1680" alt="Screen Shot 2022-07-17 at 11 59 08 PM" src="https://user-images.githubusercontent.com/106197019/179410794-e4547556-f2a0-4f20-a3f8-aa26eeb2a7b7.png">
+<img width="1680" alt="Screen Shot 2022-07-17 at 11 59 16 PM" src="https://user-images.githubusercontent.com/106197019/179410801-e1f1042e-3c9a-4401-8f78-5a2b37b0636e.png">
+<img width="1680" alt="Screen Shot 2022-07-18 at 12 02 13 AM" src="https://user-images.githubusercontent.com/106197019/179410802-14d9aa48-8fc2-4f16-9012-26eca4a363e7.png">
+<img width="1680" alt="Screen Shot 2022-07-18 at 12 05 53 AM" src="https://user-images.githubusercontent.com/106197019/179410804-798a6c0b-223d-4474-a228-9d0269f0b624.png">
+<img width="1680" alt="Screen Shot 2022-07-18 at 12 07 34 AM" src="https://user-images.githubusercontent.com/106197019/179410806-980f34eb-7da6-4b2d-b6b4-0fa449c914b0.png">
+<img width="1680" alt="Screen Shot 2022-07-18 at 12 08 45 AM" src="https://user-images.githubusercontent.com/106197019/179410808-3c75aefc-eae0-43f5-a97a-162c823eab40.png">
+
