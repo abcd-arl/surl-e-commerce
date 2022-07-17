@@ -65,7 +65,7 @@ class Order(models.Model):
     )
 
     guest_name = models.CharField(max_length=100)
-    phone_no = models.CharField(max_length=14)
+    phone_no = models.CharField(max_length=15)
     email_ad = models.EmailField(max_length=255)
     shipping_ad = models.CharField(max_length=500)
     billing_ad = models.CharField(max_length=500)
